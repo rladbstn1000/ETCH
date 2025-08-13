@@ -43,7 +43,7 @@ export default function ChatModalContainer({ onClose }: ChatModalContainerProps)
             onBack={handleBackToList} 
           />
           <div className="flex-1 overflow-hidden">
-            <ChatRoomPage />
+            <ChatRoomPage roomId={selectedRoomId} roomName={selectedRoomName} />
           </div>
         </>
       )}

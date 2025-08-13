@@ -23,11 +23,10 @@ export const authInstance = axios.create({
 // authInstance에만 요청 인터셉터를 추가합니다.
 authInstance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("access_token");
-
-    // 요청 헤더에 토큰 추가
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    const stored = localStorage.getItem("access_token");
+    const token = stored?.startsWith("Bearer ") ? stored.slice(7) : stored || "";
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },

@@ -8,6 +8,11 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // 일부 서드파티 라이브러리(예: sockjs-client)가 브라우저에서 Node의 global 객체를 참조하는 문제 대응
+      // Vite 개발 환경에서 발생하는 'global is not defined' 에러를 방지
+      window.global = window;
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
