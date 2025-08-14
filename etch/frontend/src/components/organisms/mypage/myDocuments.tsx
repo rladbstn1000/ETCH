@@ -77,8 +77,8 @@ const MyDocuments = ({
     if (currentTab === "coverLetter") {
       navigate(`/mypage/cover-letter-edit/${id}`); // Navigate to edit page
     } else {
-      // Portfolio edit logic - navigate to portfolio page
-      navigate("/mypage/portfolio"); // Navigate to portfolio edit page
+      // Portfolio edit logic - navigate to portfolio edit page
+      navigate("/mypage/portfolio/edit"); // Navigate to portfolio edit page
     }
   };
 

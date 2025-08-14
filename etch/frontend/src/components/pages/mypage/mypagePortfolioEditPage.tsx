@@ -15,7 +15,7 @@ import PortfolioStackSelect from "../../organisms/portfolio/portfolioStackSelect
 import type { ProjectCategoryEnum } from "../../../types/project/projectCategroyData";
 import PortfolioWriteTextCard from "../../organisms/portfolio/portfolioTextCard";
 import PortfolioProjectPage from "./portfolioProjectPage";
-import { getMyPortfolio, createPortfolio, convertPortfolioDataToRequest } from "../../../api/portfolioApi";
+import { getMyPortfolio, updatePortfolio, convertPortfolioDataToRequest } from "../../../api/portfolioApi";
 
 // 프로젝트 데이터 타입 정의
 interface ProjectData {
@@ -43,15 +43,15 @@ const initialProjectData: ProjectData = {
   thumbnailFile: null,
 };
 
-function MypagePortfolioPage() {
+function MypagePortfolioEditPage() {
   const [portfolioData, setPortfolioData] = useState<portfolioDatas>({
     ...PortfolioState,
     stack: [] as PortfolioStackEnum[],
   });
 
-  // 로딩 및 에러 상태
+  // 로딩 상태
   const [isLoading, setIsLoading] = useState(true);
-  const [hasExistingPortfolio, setHasExistingPortfolio] = useState(false);
+  const [portfolioId, setPortfolioId] = useState<number | null>(null);
 
   // 프로젝트 관련 상태들
   const [showProjectSection, setShowProjectSection] = useState(false);
@@ -85,11 +85,11 @@ function MypagePortfolioPage() {
           education: existingPortfolio.education,
         });
         
-        setHasExistingPortfolio(true);
+        setPortfolioId(existingPortfolio.portfolioId);
         console.log("기존 포트폴리오 로드 완료:", existingPortfolio);
       } catch (error) {
-        console.log("기존 포트폴리오 없음 또는 로드 실패:", error);
-        setHasExistingPortfolio(false);
+        console.error("포트폴리오 로드 실패:", error);
+        alert("포트폴리오를 불러올 수 없습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -269,8 +269,7 @@ function MypagePortfolioPage() {
       education: newEducationString,
     }));
 
-    // 폼 닫기
-    setShowEducationForm(false);
+    console.log("교육/활동 추가됨:", educationString);
   };
 
   const handleLicenseAdd = (languageString: string) => {
@@ -284,8 +283,7 @@ function MypagePortfolioPage() {
       language: newLanguageString,
     }));
 
-    // 폼 닫기
-    setShowLanguageForm(false);
+    console.log("자격증 추가됨:", languageString);
   };
 
   const handleEducationRemove = (index: number) => {
@@ -298,6 +296,7 @@ function MypagePortfolioPage() {
       ...prev,
       education: newEducationString,
     }));
+    console.log("교육/활동 삭제됨, 인덱스:", index);
   };
 
   const handleLanguageRemove = (index: number) => {
@@ -310,6 +309,7 @@ function MypagePortfolioPage() {
       ...prev,
       language: newLanguageString,
     }));
+    console.log("자격증 삭제됨, 인덱스:", index);
   };
 
   const handleSubmit = async () => {
@@ -324,24 +324,21 @@ function MypagePortfolioPage() {
         return;
       }
 
-      console.log("제출할 포트폴리오 데이터:", portfolioData);
-      console.log("제출할 프로젝트 데이터:", registeredProjects);
+      if (!portfolioId) {
+        alert("포트폴리오 ID를 찾을 수 없습니다.");
+        return;
+      }
+
+      console.log("수정할 포트폴리오 데이터:", portfolioData);
+      console.log("수정할 프로젝트 데이터:", registeredProjects);
 
       // portfolioData를 API 요청 형태로 변환
       const apiRequestData = convertPortfolioDataToRequest(portfolioData);
       console.log("API 전송용 데이터:", apiRequestData);
 
-      // 포트폴리오 생성 또는 수정
-      if (hasExistingPortfolio) {
-        // 기존 포트폴리오가 있으면 수정 (portfolioId가 필요하지만 일단 생성으로 처리)
-        await createPortfolio(apiRequestData);
-        alert("포트폴리오가 성공적으로 수정되었습니다!");
-      } else {
-        // 새 포트폴리오 생성
-        await createPortfolio(apiRequestData);
-        alert("포트폴리오가 성공적으로 생성되었습니다!");
-        setHasExistingPortfolio(true);
-      }
+      // 포트폴리오 수정
+      await updatePortfolio(portfolioId, apiRequestData);
+      alert("포트폴리오가 성공적으로 수정되었습니다!");
 
       // TODO: 등록된 프로젝트들 생성 API 호출
       // for (const project of registeredProjects) {
@@ -360,8 +357,8 @@ function MypagePortfolioPage() {
       // }
 
     } catch (error) {
-      console.error("포트폴리오 저장 실패:", error);
-      alert("포트폴리오 저장 중 오류가 발생했습니다.");
+      console.error("포트폴리오 수정 실패:", error);
+      alert("포트폴리오 수정 중 오류가 발생했습니다.");
     }
   };
 
@@ -379,9 +376,7 @@ function MypagePortfolioPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center mb-8">
-        {hasExistingPortfolio ? "포트폴리오 수정" : "포트폴리오 작성"}
-      </h1>
+      <h1 className="text-2xl font-bold text-center mb-8">포트폴리오 수정</h1>
 
       {/* 기본 정보 섹션 */}
       <div className="space-y-4">
@@ -552,10 +547,10 @@ function MypagePortfolioPage() {
           !portfolioData.phoneNumber ||
           !portfolioData.introduce
         }
-        submitButtonText={hasExistingPortfolio ? "포트폴리오 수정" : "포트폴리오 등록"}
+        submitButtonText="포트폴리오 수정"
       />
     </div>
   );
 }
 
-export default MypagePortfolioPage;
+export default MypagePortfolioEditPage;
