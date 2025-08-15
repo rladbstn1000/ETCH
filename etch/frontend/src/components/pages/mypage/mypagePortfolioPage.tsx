@@ -99,11 +99,11 @@ function MypagePortfolioPage() {
       .split("|")
       .filter((item) => item.trim());
     return languageItems.map((item) => {
-      const [licenseName, issuer, getAt] = item.split("^");
+      const [licenseName, getAt, issuer] = item.split("^");
       return {
         licenseName: licenseName || "",
-        issuer: issuer || "",
         getAt: getAt || "",
+        issuer: issuer || "",
       };
     });
   };
