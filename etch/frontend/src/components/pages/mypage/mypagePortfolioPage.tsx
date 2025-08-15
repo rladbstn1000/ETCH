@@ -349,8 +349,6 @@ function MypagePortfolioPage() {
         }
       }
 
-      console.log("생성된 프로젝트 ID들:", createdProjectIds);
-
       // 2. portfolioData를 API 형식으로 변환
       const requestData = convertPortfolioDataToRequest(
         portfolioData,

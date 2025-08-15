@@ -32,13 +32,13 @@ function HeaderSearch() {
   };
 
   return (
-    <div style={{ display: "flex", gap: "8px" }}>
+    <div className="flex items-center gap-2 p-1 bg-white border border-blue-200 rounded-full hover:border-blue-300 focus-within:border-blue-400 transition-all duration-200">
       <HeaderInput
         value={keyword}
         type="text"
         placeholderText="검색어를 입력하세요"
         onChange={handleChange}
-        onKeyEnter={handleKeyEnter} // 키보드 이벤트 핸들러 추가
+        onKeyEnter={handleKeyEnter}
       />
       <HeaderButton img={searchIcon} onClick={handleSearchClick} />
     </div>

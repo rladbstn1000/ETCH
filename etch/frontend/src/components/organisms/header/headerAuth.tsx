@@ -13,7 +13,7 @@ function HeaderAuth() {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       {isLoggedIn && memberInfo ? (
         // 로그인 된 상태
         <>
@@ -23,12 +23,21 @@ function HeaderAuth() {
             textColor="#007DFC"
             onClick={handleLogout}
           />
-          <button onClick={() => navigate("/mypage")} className="w-10 h-10">
-            <img
-              src={memberInfo.profile || defaultProfile}
-              alt="유저 프로필"
-              className="w-full h-full rounded-full object-cover cursor-pointer"
-            />
+          <button 
+            onClick={() => navigate("/mypage")} 
+            className="relative group"
+          >
+            <div className="w-10 h-10 transition-all duration-200 border-2 border-gray-200 rounded-full group-hover:border-blue-400 group-hover:shadow-md">
+              <img
+                src={memberInfo.profile || defaultProfile}
+                alt={`${memberInfo.nickname || '사용자'} 프로필`}
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+            {/* 호버 시 툴팁 */}
+            <div className="absolute right-0 mt-2 px-3 py-1 text-xs text-white bg-gray-800 rounded-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+              {memberInfo.nickname || '마이페이지'}
+            </div>
           </button>
         </>
       ) : (

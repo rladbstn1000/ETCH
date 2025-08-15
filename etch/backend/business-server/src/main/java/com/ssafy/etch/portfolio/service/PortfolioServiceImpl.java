@@ -1,5 +1,6 @@
 package com.ssafy.etch.portfolio.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.etch.global.exception.CustomException;
@@ -148,23 +149,25 @@ public class PortfolioServiceImpl implements PortfolioService {
         return savedEntities;
     }
 
-    private String techListToString(PortfolioRequestDTO portfolioRequestDTO) {
-        String result = null;
-        List<String> list = portfolioRequestDTO.getTechList();
-        try {
-            result = objectMapper.writeValueAsString(list);
-        } catch (Exception e) {
+    private String techListToString(PortfolioRequestDTO dto) {
+        List<String> list = dto.getTechList();
+        if (list == null) {
             throw new CustomException(ErrorCode.INVALID_INPUT);
         }
-        return result;
+        try {
+            return objectMapper.writeValueAsString(list);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(ErrorCode.INVALID_INPUT);
+        }
     }
     private List<String> stringToTechList(String techList) {
-        List<String> result;
-        try {
-            result = objectMapper.readValue(techList, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_INPUT);
+        if (techList == null || techList.isBlank()) {
+            return Collections.emptyList();
         }
-        return result;
+        try {
+            return objectMapper.readValue(techList, new TypeReference<List<String>>() {});
+        } catch (JsonProcessingException e) {
+            throw new CustomException(ErrorCode.INVALID_INPUT); // 입력 문제로 처리
+        }
     }
 }

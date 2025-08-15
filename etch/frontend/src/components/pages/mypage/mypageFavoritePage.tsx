@@ -33,7 +33,7 @@ function MypageFavoritePage() {
         <FavoriteProjectList
           titleText="관심 프로젝트"
           subText="좋아요한 프로젝트"
-          sliceCount={4}
+          sliceCount={100}
           // favoriteData, mockProjects props 제거 - 컴포넌트 내부에서 API 호출
         />
       </div>

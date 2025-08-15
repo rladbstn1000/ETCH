@@ -17,7 +17,7 @@ export const funcData: funcComponentData[] = [
   },
   {
     title: "기업 분석 리포트",
-    content: "지원하고자 하는 기업의 채용 정보와 면접 후기를 확인하세요.",
+    content: "지원하고자 하는 기업의 채용 정보와 뉴스를 확인하세요.",
     img: mainReport,
   },
   {
@@ -26,8 +26,8 @@ export const funcData: funcComponentData[] = [
     img: mainPortfolio,
   },
   {
-    title: "프로젝트 팀 구성",
-    content: "다양한 팀 스택을 가진 개인 개발자들과 협업할 수 있습니다.",
+    title: "프로젝트로 만나는 동료",
+    content: "다른 개발자들의 프로젝트를 둘러보고, 채팅으로 바로 소통하세요.",
     img: mainTeam,
   },
 ];

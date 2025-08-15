@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { MemberInfo } from "../types/memberInfo"; // 경로 확인 필요
+import type { MemberInfo } from "../types/memberInfo";
+import TokenManager from "../utils/tokenManager";
 
 // 스토어의 상태(state)와 액션(actions)에 대한 타입 정의
 interface UserState {
@@ -29,8 +30,8 @@ const useUserStore = create<UserState>()(
       // 액션: 로그아웃 처리
       logout: () => {
         set({ memberInfo: null, isLoggedIn: false });
-        // localStorage에서 Access Token 삭제
-        localStorage.removeItem("access_token");
+        // TokenManager를 통해 토큰 정보 삭제
+        TokenManager.removeToken();
         // 필요하다면 백엔드에 로그아웃 요청을 보낼 수도 있습니다.
       },
     }),

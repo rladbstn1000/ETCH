@@ -44,39 +44,10 @@ const MyDocuments = ({
   const convertCoverLetterToDisplayItem = (
     coverLetter: CoverLetterListResponse
   ): DocumentDisplayItem => {
-    // 안전한 ID 처리
-    const safeId = coverLetter?.id || 0;
-
-    // CoverLetterListResponse의 실제 필드를 타입 안전하게 확인
-    const hasTitle = coverLetter && "title" in coverLetter;
-    const hasSubject = coverLetter && "subject" in coverLetter;
-    const hasContent = coverLetter && "content" in coverLetter;
-    const hasUpdatedAt = coverLetter && "updatedAt" in coverLetter;
-    const hasModifiedAt = coverLetter && "modifiedAt" in coverLetter;
-    const hasCreatedAt = coverLetter && "createdAt" in coverLetter;
-
-    let displayText = "제목 없음";
-    if (hasTitle) {
-      displayText = (coverLetter as { title: string }).title || "제목 없음";
-    } else if (hasSubject) {
-      displayText = (coverLetter as { subject: string }).subject || "제목 없음";
-    } else if (hasContent) {
-      displayText = (coverLetter as { content: string }).content || "제목 없음";
-    }
-
-    let updatedAt = "";
-    if (hasUpdatedAt) {
-      updatedAt = (coverLetter as { updatedAt: string }).updatedAt || "";
-    } else if (hasModifiedAt) {
-      updatedAt = (coverLetter as { modifiedAt: string }).modifiedAt || "";
-    } else if (hasCreatedAt) {
-      updatedAt = (coverLetter as { createdAt: string }).createdAt || "";
-    }
-
     return {
-      id: safeId,
-      displayText,
-      updatedAt,
+      id: coverLetter?.id || 0,
+      displayText: coverLetter?.name || "제목 없음",
+      updatedAt: "", // CoverLetterListResponse에는 updatedAt이 없음
     };
   };
 

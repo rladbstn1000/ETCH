@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
 import { likeApi } from "../../../../api/likeApi";
+import { getJob } from "../../../../api/jobApi";
 import type { JobLike } from "../../../../types/like";
-import SeeMore from "../../../svg/seeMore";
+import type { JobItemProps } from "../../../atoms/listItem";
+import type { Job } from "../../../../types/job";
+import JobDetailModal from "../../job/jobDetailModal";
 
 interface Props {
   titleText: string;
@@ -12,6 +14,8 @@ interface Props {
 function FavoriteJobList({ titleText, subText }: Props) {
   const [jobs, setJobs] = useState<JobLike[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedJob, setSelectedJob] = useState<JobItemProps | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   useEffect(() => {
     const fetchFavoriteJobs = async () => {
@@ -36,7 +40,46 @@ function FavoriteJobList({ titleText, subText }: Props) {
     fetchFavoriteJobs();
   }, []);
 
-  const handleRemoveJob = async (jobId: number, jobTitle: string) => {
+  // Job 타입을 JobItemProps로 변환
+  const convertJobToJobItemProps = (job: Job): JobItemProps => {
+    return {
+      id: job.id.toString(),
+      title: job.title,
+      companyName: job.companyName,
+      companyId: job.companyId,
+      regions: job.regions,
+      industries: job.industries,
+      jobCategories: job.jobCategories,
+      workType: job.workType,
+      educationLevel: job.educationLevel,
+      openingDate: job.openingDate,
+      expirationDate: job.expirationDate,
+    };
+  };
+
+  // 관심공고 클릭 시 모달 열기
+  const handleJobClick = async (jobId: number) => {
+    try {
+      setModalLoading(true);
+      const jobDetail = await getJob(jobId);
+      const jobItemProps = convertJobToJobItemProps(jobDetail);
+      setSelectedJob(jobItemProps);
+    } catch (error) {
+      console.error("채용공고 상세 정보 로딩 실패:", error);
+      alert("채용공고 정보를 불러올 수 없습니다.");
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  // 모달 닫기
+  const handleCloseModal = () => {
+    setSelectedJob(null);
+  };
+
+  const handleRemoveJob = async (jobId: number, jobTitle: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // 클릭 이벤트 전파 방지
+    
     if (!confirm(`'${jobTitle}'을(를) 관심공고에서 삭제하시겠습니까?`)) {
       return;
     }
@@ -77,18 +120,17 @@ function FavoriteJobList({ titleText, subText }: Props) {
           </h1>
           <p className="text-sm text-gray-500">{subText}</p>
         </div>
-        <div className="flex items-center h-full">
-          <Link to={"/mypage/favorites/jobs"}>
-            <SeeMore />
-          </Link>
-        </div>
       </div>
       
       {/* List Section - 스크롤 가능 */}
       <div className="flex-1 overflow-y-auto space-y-3">
         {jobs.length > 0 ? (
           jobs.map((job) => (
-            <div key={job.id} className="flex items-start justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+            <div 
+              key={job.id} 
+              className="flex items-start justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+              onClick={() => handleJobClick(job.id)}
+            >
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-gray-900 mb-1 truncate">{job.title}</h3>
                 <p className="text-sm text-gray-600 mb-2 truncate">{job.companyName}</p>
@@ -109,7 +151,7 @@ function FavoriteJobList({ titleText, subText }: Props) {
                 </div>
               </div>
               <button
-                onClick={() => handleRemoveJob(job.id, job.title)}
+                onClick={(e) => handleRemoveJob(job.id, job.title, e)}
                 className="ml-3 p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
                 title="관심공고 삭제"
               >
@@ -145,6 +187,23 @@ function FavoriteJobList({ titleText, subText }: Props) {
           </div>
         )}
       </div>
+
+      {/* 채용공고 상세 모달 */}
+      {selectedJob && (
+        <JobDetailModal job={selectedJob} onClose={handleCloseModal} />
+      )}
+
+      {/* 모달 로딩 상태 */}
+      {modalLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="p-6 bg-white rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div className="w-5 h-5 border-b-2 border-blue-600 rounded-full animate-spin"></div>
+              <span>채용공고 정보를 불러오는 중...</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

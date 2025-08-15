@@ -3,7 +3,7 @@ import FileUploadButton from "../../molecules/join/FileUploadButton";
 import ProfileImagePreview from "../../molecules/join/ProfileImagePreview";
 
 interface ProfileImageUploaderProps {
-  onChange?: (value: string) => void;
+  onChange?: (file: File | null) => void;
 }
 
 function ProfileImageUploader({ onChange }: ProfileImageUploaderProps) {
@@ -14,8 +14,7 @@ function ProfileImageUploader({ onChange }: ProfileImageUploaderProps) {
     setImageUrl(url);
     // onChange가 있을 때만 호출
     if (onChange) {
-      // 일단 파일 이름을 전달 (나중에 실제 업로드 URL로 변경)
-      onChange(file.name);
+      onChange(file);
     }
   };
 

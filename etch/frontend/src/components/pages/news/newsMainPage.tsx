@@ -75,12 +75,13 @@ function NewsPage() {
   return (
     <div className="min-h-screen">
       {/* 헤더 섹션 */}
-      <section className="bg-white shadow-sm">
-        <div className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-8">
+      <div className="p-6 bg-white border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          {/* 왼쪽: 제목과 설명 */}
           <div className="flex items-center space-x-3">
-            <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg">
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg">
               <svg
-                className="w-5 h-5 text-blue-500"
+                className="w-5 h-5 text-blue-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -93,15 +94,41 @@ function NewsPage() {
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              뉴스
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">뉴스</h1>
+              <p className="text-sm text-gray-600">최신 IT 뉴스와 기업 정보</p>
+            </div>
           </div>
-          <p className="mt-2 text-sm text-gray-600 sm:text-base">
-            최신 IT 뉴스와 기업 정보를 한눈에 확인하세요
-          </p>
         </div>
-      </section>
+
+        {/* 하단 정보 */}
+        <div className="pt-4 mt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-6 text-sm text-gray-600">
+            <div className="flex items-center space-x-2">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span>매일 새로운 뉴스 업데이트</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <span>관심 뉴스 등록 가능</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="px-4 py-6 mx-auto space-y-8 max-w-7xl sm:px-6 lg:px-8 sm:py-8 sm:space-y-12">
         {/* 주요 기업 섹션 */}

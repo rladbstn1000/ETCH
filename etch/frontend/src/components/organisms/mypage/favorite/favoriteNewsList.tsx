@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { likeApi } from "../../../../api/likeApi";
 import type { NewsLike } from "../../../../types/like";
-import SeeMore from "../../../svg/seeMore";
 
 interface Props {
   titleText: string;
@@ -89,11 +88,6 @@ function FavoriteNewsList({ titleText, subText }: Props) {
             {titleText} ({news.length})
           </h1>
           <p className="text-sm text-gray-500">{subText}</p>
-        </div>
-        <div className="flex items-center h-full">
-          <Link to={"/mypage/favorites/news"}>
-            <SeeMore />
-          </Link>
         </div>
       </div>
       

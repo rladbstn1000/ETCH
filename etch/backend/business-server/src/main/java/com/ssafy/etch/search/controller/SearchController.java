@@ -17,8 +17,10 @@ import com.ssafy.etch.search.service.JobSearchService;
 import com.ssafy.etch.search.service.NewsSearchService;
 import com.ssafy.etch.search.service.ProjectSearchService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "SearchController", description = "통합검색 API")
 @RestController
 @RequestMapping("/search")
 @RequiredArgsConstructor

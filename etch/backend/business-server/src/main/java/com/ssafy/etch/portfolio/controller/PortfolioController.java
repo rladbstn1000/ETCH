@@ -1,5 +1,7 @@
 package com.ssafy.etch.portfolio.controller;
 
+import com.ssafy.etch.global.exception.CustomException;
+import com.ssafy.etch.global.exception.ErrorCode;
 import com.ssafy.etch.global.response.ApiResponse;
 import com.ssafy.etch.oauth.dto.CustomOAuth2User;
 import com.ssafy.etch.portfolio.dto.PortfolioDetailResponseDTO;
@@ -21,10 +23,16 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
+    private void checkAuthentication(CustomOAuth2User oAuth2User) {
+        if (oAuth2User == null) {
+            throw new CustomException(ErrorCode.UNAUTHENTICATED_USER);
+        }
+    }
 
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<List<PortfolioListResponseDTO>>> getPortfolioList(
             @AuthenticationPrincipal CustomOAuth2User oAuth2User) {
+        checkAuthentication(oAuth2User);
         List<PortfolioListResponseDTO> list = portfolioService.getPortfolioList(oAuth2User.getId());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(list));
     }
@@ -33,7 +41,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<PortfolioListResponseDTO>> createPortfolio(
             @AuthenticationPrincipal CustomOAuth2User oAuth2User,
             @RequestBody PortfolioRequestDTO portfolioRequestDTO) {
-
+        checkAuthentication(oAuth2User);
         portfolioService.savePortfolio(oAuth2User.getId(), portfolioRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null, "포트폴리오 등록 성공"));
@@ -44,7 +52,7 @@ public class PortfolioController {
             @AuthenticationPrincipal CustomOAuth2User oAuth2User,
             @RequestBody PortfolioRequestDTO portfolioRequestDTO,
             @PathVariable Long id) {
-
+        checkAuthentication(oAuth2User);
         portfolioService.updatePortfolio(oAuth2User.getId(), id, portfolioRequestDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null, "포트폴리오 수정 성공"));
@@ -54,7 +62,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<?>> deletePortfolio(
             @AuthenticationPrincipal CustomOAuth2User oAuth2User,
             @PathVariable Long portfolioId) {
-
+        checkAuthentication(oAuth2User);
         portfolioService.deletePortfolio(oAuth2User.getId(), portfolioId);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null, "포트폴리오 삭제 완료"));
@@ -64,7 +72,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<PortfolioDetailResponseDTO>> getPortfolioInfo(
             @AuthenticationPrincipal CustomOAuth2User oAuth2User,
             @PathVariable Long portfolioId) {
-
+        checkAuthentication(oAuth2User);
         PortfolioDetailResponseDTO portfolioDetailResponseDTO = portfolioService.getPortfolioDetail(oAuth2User.getId(), portfolioId);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(portfolioDetailResponseDTO, "포트폴리오 상세조회"));

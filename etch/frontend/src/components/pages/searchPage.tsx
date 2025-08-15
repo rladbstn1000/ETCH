@@ -287,7 +287,7 @@ function SearchPage() {
   return (
     <div className="min-h-screen">
       {/* 상단 헤더 */}
-      <div className="bg-white">
+      <div>
         <div className="px-6 py-6 mx-auto text-center max-w-7xl">
           <h1 className="mb-2 text-2xl font-bold text-gray-900">통합 검색</h1>
           <p className="text-gray-600">'{query}'에 대한 검색 결과입니다</p>
@@ -295,7 +295,7 @@ function SearchPage() {
       </div>
 
       {/* 검색바*/}
-      <div className="bg-white border-b border-gray-200">
+      <div className="border-b border-gray-200 ">
         <div className="px-6 py-4 mx-auto max-w-7xl">
           <div className="flex justify-center">
             {/* 검색바 */}

@@ -9,7 +9,7 @@ function HeaderInput({
 }: InputProps) {
   return (
     <input
-      className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#007DFC] rounded-full focus:outline-none focus:ring-2 focus:ring-[#007DFC] focus:ring-opacity-50 caret-[#007DFC] text-sm sm:text-base placeholder:text-gray-400"
+      className="w-full px-3 py-2 bg-transparent border-none rounded-lg focus:outline-none caret-blue-600 text-sm sm:text-base placeholder:text-gray-500"
       value={value}
       type={type}
       placeholder={placeholder}

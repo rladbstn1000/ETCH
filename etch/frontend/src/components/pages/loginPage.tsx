@@ -1,6 +1,7 @@
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useEffect } from "react";
 import GoogleAuthButton from "../molecules/googleAuthButton";
+import TokenManager from "../../utils/tokenManager";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -11,8 +12,8 @@ function LoginPage() {
     const token = searchParams.get("token");
 
     if (token) {
-      // 1. Access token을 localStorage에 저장
-      localStorage.setItem("access_token", token);
+      // 1. Access token을 TokenManager로 저장
+      TokenManager.setToken(token);
 
       // 2. 쿠키에서 refresh token 존재 확인
       const hasRefreshToken = document.cookie
@@ -22,11 +23,9 @@ function LoginPage() {
       // 3. refresh token 유무에 따른 라우팅
       if (hasRefreshToken) {
         // 기존 유저 - 메인 페이지로
-        // replace - 현재 페이지를 교체
         navigate("/", { replace: true });
       } else {
         // 신규 유저 - 추가 정보 페이지로
-        // replace - 현재 페이지를 교체
         navigate("/additional-info", { replace: true });
       }
     }
@@ -34,7 +33,7 @@ function LoginPage() {
 
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen px-4 ">
         <div className="w-full max-w-md p-8 bg-white border border-gray-100 rounded-lg shadow-sm">
           <div className="mb-8 text-center">
             <h1 className="mb-4 text-2xl font-bold text-gray-900">로그인</h1>

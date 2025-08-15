@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 import { likeApi } from "../../../../api/likeApi";
 import type { CompanyLike } from "../../../../types/like";
-import SeeMore from "../../../svg/seeMore";
 
 interface Props {
   titleText: string;
@@ -12,6 +11,7 @@ interface Props {
 function FavoriteCompanyList({ titleText, subText }: Props) {
   const [companies, setCompanies] = useState<CompanyLike[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavoriteCompanies = async () => {
@@ -36,7 +36,14 @@ function FavoriteCompanyList({ titleText, subText }: Props) {
     fetchFavoriteCompanies();
   }, []);
 
-  const handleRemoveCompany = async (companyId: number, companyName: string) => {
+  // 관심기업 클릭 시 검색페이지로 이동
+  const handleCompanyClick = (companyName: string) => {
+    navigate(`/search?q=${encodeURIComponent(companyName)}`);
+  };
+
+  const handleRemoveCompany = async (companyId: number, companyName: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // 클릭 이벤트 전파 방지
+    
     if (!confirm(`'${companyName}'을(를) 관심기업에서 삭제하시겠습니까?`)) {
       return;
     }
@@ -77,24 +84,23 @@ function FavoriteCompanyList({ titleText, subText }: Props) {
           </h1>
           <p className="text-sm text-gray-500">{subText}</p>
         </div>
-        <div className="flex items-center h-full">
-          <Link to={"/mypage/favorites/companies"}>
-            <SeeMore />
-          </Link>
-        </div>
       </div>
 
       {/* List Section - 스크롤 가능 */}
       <div className="flex-1 overflow-y-auto space-y-3">
         {companies.length > 0 ? (
           companies.map((company) => (
-            <div key={company.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+            <div 
+              key={company.id} 
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+              onClick={() => handleCompanyClick(company.name)}
+            >
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-gray-900 truncate">{company.name}</h3>
                 <p className="text-sm text-gray-600 truncate">{company.industry}</p>
               </div>
               <button
-                onClick={() => handleRemoveCompany(company.id, company.name)}
+                onClick={(e) => handleRemoveCompany(company.id, company.name, e)}
                 className="ml-3 p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
                 title="관심기업 삭제"
               >

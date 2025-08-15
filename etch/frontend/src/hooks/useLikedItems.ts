@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
 import { likeApi } from '../api/likeApi';
+import useUserStore from '../store/userStore';
 
 // 관심 공고 훅
 export const useLikedJobs = () => {
   const [likedJobIds, setLikedJobIds] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const { isLoggedIn } = useUserStore();
 
   useEffect(() => {
     const fetchLikedJobs = async () => {
+      // 로그인하지 않은 경우 API 호출하지 않음
+      if (!isLoggedIn) {
+        setIsLoading(false);
+        setLikedJobIds(new Set());
+        return;
+      }
+
       try {
         setIsLoading(true);
         const likedJobs = await likeApi.jobs.getLikes();
@@ -26,7 +35,7 @@ export const useLikedJobs = () => {
     };
 
     fetchLikedJobs();
-  }, []);
+  }, [isLoggedIn]);
 
   const addLikedJob = (jobId: number) => {
     setLikedJobIds(prev => new Set([...prev, jobId]));
@@ -55,9 +64,17 @@ export const useLikedJobs = () => {
 export const useLikedNews = () => {
   const [likedNewsIds, setLikedNewsIds] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const { isLoggedIn } = useUserStore();
 
   useEffect(() => {
     const fetchLikedNews = async () => {
+      // 로그인하지 않은 경우 API 호출하지 않음
+      if (!isLoggedIn) {
+        setIsLoading(false);
+        setLikedNewsIds(new Set());
+        return;
+      }
+
       try {
         setIsLoading(true);
         const likedNews = await likeApi.news.getLikes();
@@ -76,7 +93,7 @@ export const useLikedNews = () => {
     };
 
     fetchLikedNews();
-  }, []);
+  }, [isLoggedIn]);
 
   const addLikedNews = (newsId: number) => {
     setLikedNewsIds(prev => new Set([...prev, newsId]));
@@ -105,9 +122,17 @@ export const useLikedNews = () => {
 export const useLikedCompanies = () => {
   const [likedCompanyIds, setLikedCompanyIds] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const { isLoggedIn } = useUserStore();
 
   useEffect(() => {
     const fetchLikedCompanies = async () => {
+      // 로그인하지 않은 경우 API 호출하지 않음
+      if (!isLoggedIn) {
+        setIsLoading(false);
+        setLikedCompanyIds(new Set());
+        return;
+      }
+
       try {
         setIsLoading(true);
         const likedCompanies = await likeApi.companies.getLikes();
@@ -126,7 +151,7 @@ export const useLikedCompanies = () => {
     };
 
     fetchLikedCompanies();
-  }, []);
+  }, [isLoggedIn]);
 
   const addLikedCompany = (companyId: number) => {
     setLikedCompanyIds(prev => new Set([...prev, companyId]));

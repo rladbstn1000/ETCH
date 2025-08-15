@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import type { FavoriteProjectProps } from "../../../atoms/list";
 import FavoriteProject from "../../../molecules/mypage/favorite/favoriteProject";
-import type { ProjectData } from "../../../../types/project/projectDatas"; // 🎯 ProjectCardProps 대신 ProjectData 사용
+import type { ProjectData } from "../../../../types/project/projectDatas";
 import ProjectModal from "../../../common/projectModal";
-import SeeMore from "../../../svg/seeMore";
 import { Link } from "react-router";
 import { getLikedProjects, getProjectById } from "../../../../api/projectApi";
 
@@ -159,56 +158,54 @@ function FavoriteProjectList({
   }
 
   return (
-    <div className="bg-white rounded-xl space-y-3 shadow-sm border border-gray-100 p-6 h-fit">
-      <div className="flex items-center justify-between">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-[500px] flex flex-col">
+      {/* Header Section */}
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div>
           <h1 className="text-xl font-bold text-gray-900 mb-1">
             {titleText} ({favoriteData.length})
           </h1>
           <p className="text-sm text-gray-500">{subText}</p>
         </div>
-        <div className="flex items-center h-full">
-          <Link to={"/mypage/favorites/projects"}>
-            <SeeMore />
-          </Link>
-        </div>
       </div>
 
       {error && (
-        <div className="text-center py-4">
+        <div className="text-center py-4 flex-shrink-0">
           <p className="text-red-500 text-sm">{error}</p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {favoriteData.length > 0 ? (
-          favoriteData
-            .slice(0, sliceCount)
-            .map((data) => (
-              <FavoriteProject
-                key={data.id}
-                {...data}
-                onCardClick={handleCardClick}
-              />
-            ))
-        ) : (
-          <div className="col-span-full text-center py-12">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-4xl">💝</span>
+      {/* List Section - 스크롤 가능 */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {favoriteData.length > 0 ? (
+            favoriteData
+              .map((data) => (
+                <FavoriteProject
+                  key={data.id}
+                  {...data}
+                  onCardClick={handleCardClick}
+                />
+              ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-4xl">💝</span>
+              </div>
+              <p className="text-gray-500 text-base font-medium mb-2">
+                좋아요한 프로젝트가 없습니다
+              </p>
+              <p className="text-gray-400 text-sm mb-4">
+                관심있는 프로젝트에 좋아요를 눌러보세요
+              </p>
+              <Link to="/projects">
+                <button className="bg-[#007DFC] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm">
+                  프로젝트 둘러보기
+                </button>
+              </Link>
             </div>
-            <p className="text-gray-500 text-base font-medium mb-2">
-              좋아요한 프로젝트가 없습니다
-            </p>
-            <p className="text-gray-400 text-sm mb-4">
-              관심있는 프로젝트에 좋아요를 눌러보세요
-            </p>
-            <Link to="/projects">
-              <button className="bg-[#007DFC] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm">
-                프로젝트 둘러보기
-              </button>
-            </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* 🎯 프로젝트 모달 - onProjectUpdate 추가 */}

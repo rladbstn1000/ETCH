@@ -1,11 +1,23 @@
 import JobListItem from "../../molecules/job/jobListItem";
-import type { JobItemProps } from "../../atoms/listItem";
+import type { Job } from "../../../types/job";
+import { useLikedJobs } from "../../../hooks/useLikedItems";
 
 interface RecommendedJobsProps {
-  jobs: JobItemProps[];
+  jobs: Job[];
+  onJobClick?: (jobId: string) => void;
 }
 
-const RecommendedJobs = ({ jobs }: RecommendedJobsProps) => {
+const RecommendedJobs = ({ jobs, onJobClick }: RecommendedJobsProps) => {
+  const { isJobLiked, addLikedJob, removeLikedJob } = useLikedJobs();
+
+  const handleLikeStateChange = (jobId: number, isLiked: boolean) => {
+    if (isLiked) {
+      addLikedJob(jobId);
+    } else {
+      removeLikedJob(jobId);
+    }
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
       <div className="p-6 border-b border-gray-200">
@@ -15,15 +27,35 @@ const RecommendedJobs = ({ jobs }: RecommendedJobsProps) => {
         </p>
       </div>
       <div className="p-6">
-        <div className="space-y-3">
-          {jobs.map((job) => (
-            <JobListItem
-              key={job.id}
-              {...job}
-              onClick={(id) => console.log(`Job ${id} clicked`)}
-            />
-          ))}
-        </div>
+        {jobs.length === 0 ? (
+          <div className="py-8 text-center text-gray-500">
+            <div className="mb-2 text-2xl">💼</div>
+            <p>추천 채용 공고가 없습니다</p>
+            <p className="text-sm">관심 기업이나 직무에 좋아요를 눌러보세요</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {jobs.slice(0, 5).map((job) => (
+              <JobListItem
+                key={job.id}
+                id={job.id.toString()}
+                title={job.title}
+                companyName={job.companyName}
+                companyId={job.companyId}
+                regions={job.regions}
+                industries={job.industries}
+                jobCategories={job.jobCategories}
+                workType={job.workType}
+                educationLevel={job.educationLevel}
+                openingDate={job.openingDate}
+                expirationDate={job.expirationDate}
+                onClick={onJobClick}
+                isLiked={isJobLiked(job.id)}
+                onLikeStateChange={handleLikeStateChange}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

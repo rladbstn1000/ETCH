@@ -11,12 +11,16 @@ interface CalendarViewProps {
   jobList: JobItemProps[];
   onEventClick?: (jobId: string) => void;
   onDateRangeChange?: (startDate: Date, endDate: Date) => void;
+  currentDate?: Date;
+  onDateChange?: (date: Date) => void;
 }
 
 function CalendarView({
   jobList,
   onEventClick,
   onDateRangeChange,
+  currentDate,
+  onDateChange,
 }: CalendarViewProps) {
   const { isJobLiked, addLikedJob, removeLikedJob } = useLikedJobs();
   const [bookmarkingJobs, setBookmarkingJobs] = useState<Set<string>>(new Set());
@@ -81,13 +85,14 @@ function CalendarView({
       // 시작일 이벤트
       events.push({
         id: `${job.id}-start`,
-        title: `🚀 ${job.companyName}`,
+        title: job.companyName,
         start: job.openingDate,
         allDay: true,
-        backgroundColor: "#bfdbfe",
-        borderColor: "transparent",
+        backgroundColor: "#ffffff",
+        borderColor: "#3b82f6",
         textColor: "#1f2937",
         display: "block",
+        className: "event-start",
         extendedProps: {
           type: "start",
           companyName: job.companyName,
@@ -103,13 +108,14 @@ function CalendarView({
       // 마감일 이벤트
       events.push({
         id: `${job.id}-end`,
-        title: `⏰ ${job.companyName}`,
+        title: job.companyName,
         start: job.expirationDate,
         allDay: true,
-        backgroundColor: "#d1d5db",
-        borderColor: "transparent",
+        backgroundColor: "#ffffff",
+        borderColor: "#dc2626",
         textColor: "#1f2937",
         display: "block",
+        className: "event-end",
         extendedProps: {
           type: "end",
           companyName: job.companyName,
@@ -135,6 +141,14 @@ function CalendarView({
 
   const handleDatesSet = (dateInfo: any) => {
     console.log("[CalendarView] handleDatesSet called with:", dateInfo);
+    
+    // 현재 달력의 중심 날짜를 상위 컴포넌트에 전달 (날짜 상태 유지용)
+    if (onDateChange) {
+      const centerDate = new Date(dateInfo.view.currentStart);
+      centerDate.setDate(15); // 달의 중간 날짜로 설정
+      onDateChange(centerDate);
+    }
+    
     // dateInfo.start: 달력에서 보이는 첫 번째 날짜 (7월 27일)
     // dateInfo.end: 달력에서 보이는 마지막 날짜 + 1 (9월 7일)
     const startDate = new Date(dateInfo.start);
@@ -189,12 +203,19 @@ function CalendarView({
     const isBookmarking = bookmarkingJobs.has(originalId);
 
     return (
-      <div className="flex items-center justify-between w-full px-1">
-        <span className="flex-1 text-xs truncate">
-          {type === "start" ? "🚀" : "⏰"} {companyName}
-        </span>
+      <div className="flex items-center w-full px-1 relative">
+        <div className="flex items-center space-x-1 flex-1 min-w-0 pr-5">
+          <span className={`px-1.5 py-0.5 text-xs font-medium rounded flex-shrink-0 ${
+            type === "start" 
+              ? "bg-blue-100 text-blue-700" 
+              : "bg-red-100 text-red-700"
+          }`}>
+            {type === "start" ? "시작" : "마감"}
+          </span>
+          <span className="text-xs truncate min-w-0">{companyName}</span>
+        </div>
         <button
-          className={`flex-shrink-0 ml-1 transition-opacity ${
+          className={`absolute right-1 w-4 h-4 flex-shrink-0 transition-opacity ${
             isBookmarking 
               ? "opacity-30 cursor-not-allowed" 
               : isLiked 
@@ -263,7 +284,8 @@ function CalendarView({
           }
           .fc-event {
             border-radius: 4px !important;
-            border: none !important;
+            border-width: 1px !important;
+            border-style: solid !important;
             padding: 0.125rem 0.25rem !important;
             margin: 0 !important;
             font-size: 0.7rem !important;
@@ -271,6 +293,14 @@ function CalendarView({
             cursor: pointer !important;
             height: auto !important;
             min-height: 16px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+            overflow: hidden !important;
+          }
+          .fc-event.event-start {
+            border-color: #3b82f6 !important;
+          }
+          .fc-event.event-end {
+            border-color: #dc2626 !important;
           }
           .fc-daygrid-day-frame {
             min-height: 140px !important;
@@ -307,20 +337,40 @@ function CalendarView({
           .fc-theme-standard th {
             border-color: #e5e7eb !important;
           }
+          .fc-toolbar {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin-bottom: 1rem !important;
+            position: relative !important;
+            gap: 1.5rem !important;
+            transform: translateX(15px) !important;
+          }
+          .fc-toolbar-chunk {
+            display: flex !important;
+            align-items: center !important;
+          }
+          .fc-toolbar-chunk:nth-child(3) {
+            gap: 0.5rem !important;
+          }
         `}</style>
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
+        initialDate={currentDate}
         headerToolbar={{
-          left: "prev,next today",
+          left: "prev",
           center: "title",
-          right: "dayGridMonth",
+          right: "next today",
         }}
         events={events}
         eventClick={handleEventClick}
         datesSet={handleDatesSet}
         height="auto"
         locale="ko"
+        buttonText={{
+          today: "오늘"
+        }}
         displayEventTime={false}
         aspectRatio={1.2}
         eventDisplay="block"
@@ -392,22 +442,55 @@ function CalendarView({
               font-size: 13px;
               display: flex;
               align-items: center;
-              justify-content: space-between;
+              position: relative;
               background-color: ${seg.event.backgroundColor || "#f3f4f6"};
               color: ${seg.event.textColor || "#374151"};
               transition: opacity 0.2s;
+              border: 1px solid ${seg.event.borderColor || "#e5e7eb"};
             `;
 
             // 이벤트 제목 부분
-            const titleSpan = document.createElement("span");
-            titleSpan.style.cssText = `
+            const titleContainer = document.createElement("div");
+            titleContainer.style.cssText = `
               flex: 1;
-              truncate: true;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              overflow: hidden;
+              min-width: 0;
+              padding-right: 20px;
+            `;
+            
+            // 배지 생성
+            const badge = document.createElement("span");
+            const eventType = seg.event.extendedProps.type;
+            badge.style.cssText = `
+              display: inline-block;
+              padding: 2px 6px;
+              font-size: 10px;
+              font-weight: 500;
+              border-radius: 4px;
+              flex-shrink: 0;
+              ${eventType === 'start' 
+                ? 'background-color: #dbeafe; color: #1d4ed8;'
+                : 'background-color: #fed7d7; color: #dc2626;'
+              }
+            `;
+            badge.textContent = eventType === 'start' ? '시작' : '마감';
+            
+            // 회사명
+            const companySpan = document.createElement("span");
+            companySpan.style.cssText = `
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              font-size: 12px;
+              min-width: 0;
             `;
-            titleSpan.textContent = seg.event.title;
+            companySpan.textContent = seg.event.extendedProps.companyName;
+            
+            titleContainer.appendChild(badge);
+            titleContainer.appendChild(companySpan);
 
             // 북마크 버튼 부분
             const bookmarkBtn = document.createElement("button");
@@ -416,24 +499,30 @@ function CalendarView({
             const isBookmarking = bookmarkingJobs.has(originalId);
             
             bookmarkBtn.style.cssText = `
-              margin-left: 10px;
+              position: absolute;
+              right: 4px;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 16px;
+              height: 16px;
               opacity: ${isBookmarking ? '0.3' : eventIsLiked ? '0.9' : '0.7'};
               background: none;
               border: none;
               cursor: ${isBookmarking ? 'not-allowed' : 'pointer'};
-              padding: 4px;
+              padding: 0;
               display: flex;
               align-items: center;
+              justify-content: center;
               flex-shrink: 0;
-              border-radius: 4px;
+              border-radius: 2px;
               transition: background-color 0.2s, opacity 0.2s;
               color: ${eventIsLiked ? '#eab308' : 'currentColor'};
             `;
             
             if (isBookmarking) {
               bookmarkBtn.innerHTML = `
-                <div style="width: 16px; height: 16px;" class="animate-spin">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <div style="width: 14px; height: 14px;" class="animate-spin">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
                       <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
                       <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
@@ -443,7 +532,7 @@ function CalendarView({
               `;
             } else {
               bookmarkBtn.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" ${eventIsLiked ? 'fill="currentColor"' : 'fill="none"'} stroke="currentColor" stroke-width="${eventIsLiked ? '0' : '2'}" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" ${eventIsLiked ? 'fill="currentColor"' : 'fill="none"'} stroke="currentColor" stroke-width="${eventIsLiked ? '0' : '2'}" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
                 </svg>
               `;
@@ -468,7 +557,7 @@ function CalendarView({
               }
             });
 
-            eventEl.appendChild(titleSpan);
+            eventEl.appendChild(titleContainer);
             eventEl.appendChild(bookmarkBtn);
 
             eventEl.addEventListener("mouseenter", () => {

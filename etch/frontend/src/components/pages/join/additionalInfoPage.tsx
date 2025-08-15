@@ -7,6 +7,7 @@ import BirthDateSelector from "../../organisms/join/BirthDateSelector";
 import GenderRadioGroup from "../../organisms/join/genderRadioGroup";
 import ProfileImageUploader from "../../organisms/join/profileImageUploader";
 import CompletionButton from "../../molecules/join/completionButton";
+import TokenManager from "../../../utils/tokenManager";
 
 function AdditionalInfoPage() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function AdditionalInfoPage() {
   const [tel, setTel] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
-  const [profile, setProfile] = useState("");
+  const [profile, setProfile] = useState<File | null>(null);
 
   const handleNicknameChange = (value: string) => {
     setNickname(value);
@@ -32,8 +33,8 @@ function AdditionalInfoPage() {
     setGender(value);
   };
 
-  const handleProfileChange = (value: string) => {
-    setProfile(value);
+  const handleProfileChange = (file: File | null) => {
+    setProfile(file);
   };
 
   const handleSubmit = async () => {
@@ -42,10 +43,10 @@ function AdditionalInfoPage() {
     console.log("tel:", tel);
     console.log("birth:", birth);
     console.log("gender:", gender);
-    console.log("profile:", profile);
+    console.log("profile:", profile?.name || "No file selected");
 
     try {
-      const accessToken = localStorage.getItem("access_token");
+      const accessToken = TokenManager.getToken();
 
       if (!accessToken) {
         alert("비정상적인 접근입니다.");
@@ -55,7 +56,7 @@ function AdditionalInfoPage() {
 
       // FormData 생성 (multipart/form-data)
       const formData = new FormData();
-      
+
       // JSON 데이터를 'data' 파트에 추가
       const memberData = {
         nickname,
@@ -63,15 +64,15 @@ function AdditionalInfoPage() {
         gender,
         birth,
       };
-      formData.append('data', JSON.stringify(memberData));
-      
+      formData.append("data", JSON.stringify(memberData));
+
       // 프로필 이미지가 있으면 'profile' 파트에 추가
       if (profile) {
-        formData.append('profile', profile);
+        formData.append("profile", profile);
       }
 
       console.log("회원가입 데이터:", memberData);
-      console.log("프로필 파일:", profile);
+      console.log("프로필 파일:", profile?.name || "No file selected");
       console.log("Access Token:", accessToken);
 
       const response = await axios.post(
@@ -96,7 +97,7 @@ function AdditionalInfoPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen px-4">
       <div className="w-full max-w-md p-8 bg-white border border-gray-100 rounded-lg shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="mb-4 text-2xl font-bold text-gray-900">프로필 설정</h1>

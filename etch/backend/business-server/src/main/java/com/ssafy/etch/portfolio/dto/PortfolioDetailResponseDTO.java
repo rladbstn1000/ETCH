@@ -60,7 +60,7 @@ public class PortfolioDetailResponseDTO {
                                 .certificateIssuer(getValue(info, 2))
                                 .build()
                 ))
-                .projectList(portfolioDTO.getProject().stream()
+                .projectList(portfolioDTO.getProject() == null ? Collections.emptyList() : portfolioDTO.getProject().stream()
                         .map(p -> ProjectListDTO.from(p.getProject().toProjectDTO()))
                         .toList())
                 .build();

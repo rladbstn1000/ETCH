@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { getMemberInfo } from "../../api/authApi";
 import useUserStore from "../../store/userStore";
+import TokenManager from "../../utils/tokenManager";
 
 const OAuthLoadingPage = () => {
   const { setMemberInfo } = useUserStore(); // Zustand 스토어에서 사용자 정보 설정 함수 가져오기
@@ -13,8 +14,8 @@ const OAuthLoadingPage = () => {
     const token = searchParams.get("token");
 
     if (token) {
-      // 1. Access token을 localStorage에 저장
-      localStorage.setItem("access_token", token);
+      // 1. Access token을 TokenManager로 저장 (발급 시간 포함)
+      TokenManager.setToken(token);
 
       const checkUser = async () => {
         try {
@@ -23,22 +24,27 @@ const OAuthLoadingPage = () => {
           // Zustand 스토어에 사용자 정보 저장
           setMemberInfo(userInfo);
 
-          // 기존 유저 - 메인 페이지로
+          // 로그인 후 메인 페이지로 이동
           navigate("/", { replace: true });
         } catch (error: any) {
           // 신규 유저 추가 정보 페이지로
-          if (error.response.data.message === "사용자를 찾을 수 없습니다.") {
+          if (error.response?.data?.message === "사용자를 찾을 수 없습니다.") {
             navigate("/additional-info", { replace: true });
           } else {
             // 기타 에러 - 로그인 페이지로
             console.error("Error fetching member info:", error);
-            alert("오류가 발생했습니다. 다시 시도해주세요.");
+            alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
             navigate("/join", { replace: true });
           }
         }
       };
 
       checkUser();
+    } else {
+      // 토큰이 없는 경우 - OAuth 실패로 간주
+      console.error("OAuth token not found");
+      alert("로그인에 실패했습니다. 다시 시도해주세요.");
+      navigate("/login", { replace: true });
     }
   }, [searchParams, navigate]);
 
