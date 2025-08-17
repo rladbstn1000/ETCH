@@ -56,10 +56,10 @@ public class ProjectServiceImpl implements ProjectService {
 	private final S3Service s3Service;
 	private final ApplicationEventPublisher events;
 
-	private static final Set<String> ALLOWED_IMAGE_CT = Set.of("image/jpeg", "image/png");
+	private static final Set<String> ALLOWED_IMAGE_CT = Set.of("image/jpeg", "image/png", "image/gif", "image/webp");
 	private static final Set<String> ALLOWED_IMAGE_EXT = Set.of(".jpg", ".png", "jpeg", ".gif", "webp");
 	private static final long MAX_SIZE = 5L * 1024 * 1024; // 5MB
-	private static final int MAX_IMAGES = 9; // 썸네일 제외 본문 이미지 최대 4장
+	private static final int MAX_IMAGES = 10; // 썸네일 제외 본문 이미지 최대 10장
 
 	private static final int MAX_PAGE_SIZE = 100;
 
