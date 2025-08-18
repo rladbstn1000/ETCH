@@ -126,31 +126,22 @@ function MypageProjectPage() {
         }
 
         setUserInfo(currentUserInfo);
-        console.log("👤 현재 사용자:", currentUserInfo);
 
         let transformedProjects: ProjectData[] = [];
 
         try {
           // 먼저 getMyProjects API 시도 (/members/projects)
-          console.log("📡 getMyProjects API 호출 중...");
           const myProjectsData: MyProjectResponse[] = await getMyProjects();
-          console.log("✅ getMyProjects 성공:", myProjectsData.length, "개");
 
           // MyProjectResponse를 ProjectData로 변환
           transformedProjects = myProjectsData.map((project) =>
             transformMyProjectToProjectData(project, currentUserInfo.id)
           );
         } catch (myProjectsError) {
-          console.warn(
-            "⚠️ getMyProjects 실패, getAllProjects로 대체:",
-            myProjectsError
-          );
 
           try {
             // getMyProjects가 실패하면 getAllProjects로 대체하고 필터링
-            console.log("📡 getAllProjects API 호출 중...");
             const allProjects: AllProjectResponse[] = await getAllProjects();
-            console.log("✅ getAllProjects 성공:", allProjects.length, "개");
 
             // 현재 사용자의 프로젝트만 필터링
             const myProjectsFiltered = allProjects.filter((project) => {
@@ -162,7 +153,6 @@ function MypageProjectPage() {
               return project.nickname === currentUserInfo.nickname;
             });
 
-            console.log("🔍 필터링 결과:", myProjectsFiltered.length, "개");
 
             // AllProjectResponse를 ProjectData로 변환
             transformedProjects = myProjectsFiltered.map((project) =>
@@ -174,7 +164,6 @@ function MypageProjectPage() {
           }
         }
 
-        console.log("🔄 최종 변환된 데이터:", transformedProjects.length, "개");
         setMyProjects(transformedProjects);
       } catch (error) {
         console.error("❌ 프로젝트 로딩 실패:", error);

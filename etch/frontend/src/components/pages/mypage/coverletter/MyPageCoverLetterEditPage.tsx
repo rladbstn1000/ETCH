@@ -79,7 +79,6 @@ function MyPageCoverLetterEditPage() {
         answer5: answers[4] || "",
       };
 
-      console.log("자기소개서 수정 요청:", coverLetterData);
       await updateCoverLetter(coverLetterId, coverLetterData);
       alert("자기소개서가 성공적으로 수정되었습니다!");
       navigate("/mypage");

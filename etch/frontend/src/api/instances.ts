@@ -51,15 +51,12 @@ authInstance.interceptors.response.use(
   // 2. 에러가 발생한 응답을 처리
   async (error) => {
     const originalRequest = error.config;
-    console.log("API 요청 실패:", error);
-    console.log("원래 요청 정보:", originalRequest);
 
     // 401 에러이고, 재시도한 요청이 아닐 경우에만 토큰 갱신 시도
     if (error.response?.status === 401 && !originalRequest._retry) {
       // 로그인 상태가 아닌 경우 (access_token이 없는 경우) 바로 로그인 요구
       const accessToken = TokenManager.getToken();
       if (!accessToken) {
-        console.log("로그인되지 않은 상태에서 인증이 필요한 API 호출");
         // /members/me 호출이 아닌 경우에만 alert 표시
         if (!originalRequest.url?.includes('/members/me')) {
           alert("로그인이 필요한 기능입니다. 로그인 후 이용해주세요.");

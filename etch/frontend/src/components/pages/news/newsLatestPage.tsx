@@ -21,17 +21,10 @@ function NewsLatestPage() {
       setLoading(true);
       setError(null);
 
-      console.log("=== 최신 뉴스 페이지 API 호출 ===");
-      console.log("요청 페이지:", page);
 
       // 페이지네이션된 뉴스 데이터 요청
       const data = await getLatestNewsPaginated(page, 10);
 
-      console.log("=== 백엔드 응답 ===");
-      console.log("받은 데이터:", data);
-      console.log("content 길이:", data.content.length);
-      console.log("currentPage:", data.currentPage);
-      console.log("totalPages:", data.totalPages);
 
       setNewsPageData({
         content: data.content,
@@ -50,9 +43,6 @@ function NewsLatestPage() {
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
-    console.log("=== 페이지 변경 ===");
-    console.log("클릭된 페이지:", page);
-    console.log("현재 페이지 상태:", newsPageData.currentPage);
 
     loadNewsData(page);
 
@@ -62,7 +52,6 @@ function NewsLatestPage() {
 
   // 초기 데이터 로드
   useEffect(() => {
-    console.log("=== 최신 뉴스 페이지 초기 로딩 ===");
     loadNewsData(1);
   }, []);
 

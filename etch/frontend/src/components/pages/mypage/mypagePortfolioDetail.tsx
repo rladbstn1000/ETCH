@@ -88,9 +88,7 @@ const getCurrentUserId = (): number | null => {
         if (payload.id) {
           return Number(payload.id);
         }
-      } catch (tokenError) {
-        console.warn("토큰 파싱 실패:", tokenError);
-      }
+      } catch (tokenError) {}
     }
 
     return null;
@@ -246,18 +244,11 @@ function MypagePortfolioDetail() {
         setIsLoading(true);
         setError(null);
 
-        console.log("=== 포트폴리오 조회 시작 ===");
-        console.log("요청된 userId:", userId);
-
         // 1. 현재 로그인한 사용자 ID 확인
         const currentUserId = getCurrentUserId();
-        console.log("현재 로그인한 사용자 ID:", currentUserId);
 
         // 2. 포트폴리오 조회
         const portfolioData = await getPortfolioDetail(Number(userId));
-        console.log("포트폴리오 데이터:", portfolioData);
-        console.log("포트폴리오 소유자 ID:", portfolioData.memberId);
-        console.log("포트폴리오에 포함된 프로젝트:", portfolioData.projectList);
 
         setPortfolio(portfolioData);
 
@@ -266,7 +257,6 @@ function MypagePortfolioDetail() {
           currentUserId &&
           portfolioData.memberId &&
           Number(currentUserId) === Number(portfolioData.memberId);
-        console.log("소유자 여부:", ownerCheck);
         setIsOwner(ownerCheck || false);
       } catch (err) {
         console.error("포트폴리오 상세 조회 실패:", err);
@@ -280,8 +270,7 @@ function MypagePortfolioDetail() {
   }, [userId]);
 
   // 프로젝트 업데이트 핸들러
-  const handleProjectUpdate = (updatedProject: ProjectData) => {
-    console.log("프로젝트 업데이트:", updatedProject);
+  const handleProjectUpdate = () => {
     // 필요시 프로젝트 리스트 업데이트 로직 추가
   };
 
@@ -302,17 +291,13 @@ function MypagePortfolioDetail() {
 
     if (portfolio.portfolioId) {
       portfolioId = portfolio.portfolioId;
-      console.log("portfolioId 필드 사용:", portfolioId);
     } else if ((portfolio as any).id) {
       portfolioId = (portfolio as any).id;
-      console.log("id 필드 사용:", portfolioId);
     } else if (userId) {
       portfolioId = Number(userId);
-      console.log("URL userId 사용:", portfolioId);
     }
 
     if (portfolioId) {
-      console.log("포트폴리오 수정 페이지로 이동:", portfolioId);
       navigate(`/mypage/portfolios/edit/${portfolioId}`);
     } else {
       console.error("포트폴리오 ID를 찾을 수 없습니다.");
@@ -360,26 +345,13 @@ function MypagePortfolioDetail() {
   // 🔥 수정: 항상 포트폴리오에 포함된 프로젝트만 표시
   const displayProjects: ProjectData[] = (() => {
     if (portfolio.projectList && portfolio.projectList.length > 0) {
-      console.log(
-        "포트폴리오에 포함된 프로젝트만 표시:",
-        portfolio.projectList.length,
-        "개"
-      );
       return portfolio.projectList.map(convertProjectInfoToProjectData);
     } else {
-      console.log("포트폴리오에 포함된 프로젝트가 없음");
       return [];
     }
   })();
 
-  console.log("=== 최종 표시할 프로젝트 ===");
-  console.log("개수:", displayProjects.length);
-  console.log("프로젝트 목록:", displayProjects);
-
   const handleDownloadMarkdown = async () => {
-    console.log("=== 마크다운 다운로드 함수 시작 ===");
-    console.log("portfolio 객체:", portfolio);
-
     // 타입 단언을 사용해서 id 속성에 접근
     const portfolioWithId = portfolio as any;
     const portfolioId = portfolioWithId?.portfolioId || portfolioWithId?.id;
@@ -391,20 +363,9 @@ function MypagePortfolioDetail() {
     }
 
     try {
-      console.log("포트폴리오 ID:", portfolioId);
-      console.log("포트폴리오 이름:", portfolio.name);
-
       const token = localStorage.getItem("access_token");
-      console.log("토큰 존재 여부:", !!token);
-      console.log("토큰 길이:", token ? token.length : 0);
 
       const apiUrl = `/api/v1/portfolios/${portfolioId}/markdown`;
-      console.log("API URL:", apiUrl);
-
-      console.log("요청 헤더:", {
-        Authorization: `Bearer ${token?.substring(0, 10)}...`,
-        "Content-Type": "application/json",
-      });
 
       const response = await fetch(apiUrl, {
         method: "GET",
@@ -413,10 +374,6 @@ function MypagePortfolioDetail() {
           "Content-Type": "application/json",
         },
       });
-
-      console.log("응답 상태:", response.status);
-      console.log("응답 OK:", response.ok);
-      console.log("응답 헤더:", Object.fromEntries(response.headers));
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -428,36 +385,23 @@ function MypagePortfolioDetail() {
 
       // 마크다운 내용을 가져와서 파일로 다운로드
       const markdownContent = await response.text();
-      console.log("마크다운 내용 길이:", markdownContent.length);
-      console.log(
-        "마크다운 내용 미리보기:",
-        markdownContent.substring(0, 200) + "..."
-      );
 
       // Blob 생성 및 다운로드
       const blob = new Blob([markdownContent], { type: "text/markdown" });
-      console.log("Blob 생성 완료, 크기:", blob.size);
 
       const url = window.URL.createObjectURL(blob);
-      console.log("Object URL 생성:", url);
 
       const link = document.createElement("a");
       link.href = url;
       const filename = `${portfolio.name || "portfolio"}_portfolio.md`;
       link.download = filename;
-      console.log("다운로드 파일명:", filename);
 
       document.body.appendChild(link);
-      console.log("링크 DOM에 추가 완료");
 
       link.click();
-      console.log("링크 클릭 완료");
 
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-      console.log("정리 작업 완료");
-
-      console.log("=== 마크다운 파일 다운로드 완료 ===");
     } catch (error) {
       console.error("=== 마크다운 다운로드 실패 ===");
       console.error("에러 객체:", error);

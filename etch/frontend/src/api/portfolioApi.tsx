@@ -247,13 +247,10 @@ export const convertPortfolioDataToRequest = (
   portfolioData: portfolioDatas,
   projectList: PortfolioProjectId[] = []
 ): CreatePortfolioRequest => {
-  console.log("🔄 convertPortfolioDataToRequest 호출됨");
-  console.log("📥 입력 projectList:", projectList);
 
   // 프로젝트 ID만 추출 (백엔드에서 기대하는 형태)
   const projectIds = projectList.map((project) => project.id);
 
-  console.log("📤 변환된 projectIds:", projectIds);
 
   const convertedData = {
     name: portfolioData.name || "",
@@ -272,7 +269,6 @@ export const convertPortfolioDataToRequest = (
     projectIds: projectIds, // [67, 65, 66, 63, 62] 형태로 전송
   };
 
-  console.log("📤 최종 변환된 데이터:", convertedData);
 
   return convertedData;
 };

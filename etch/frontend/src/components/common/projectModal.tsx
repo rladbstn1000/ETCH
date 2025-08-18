@@ -43,11 +43,9 @@ function ProjectModal({ project, onClose, onProjectUpdate }: Props) {
   // 🎯 좋아요 처리 함수
   const handleLike = async () => {
     try {
-      console.log("좋아요 처리 시작:", project.likedByMe);
 
       if (project.likedByMe) {
         await unlikeProject(project.id);
-        console.log("좋아요 취소 성공");
 
         // 상태 업데이트
         const updatedProject = {
@@ -58,7 +56,6 @@ function ProjectModal({ project, onClose, onProjectUpdate }: Props) {
         onProjectUpdate?.(updatedProject);
       } else {
         await likeProject(project.id);
-        console.log("좋아요 추가 성공");
 
         // 상태 업데이트
         const updatedProject = {

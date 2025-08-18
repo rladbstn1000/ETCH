@@ -14,9 +14,7 @@ export class ChatService {
         connectHeaders: token ? {
           Authorization: `Bearer ${token}`
         } : {},
-        debug: (str) => console.log('STOMP Debug:', str),
         onConnect: () => {
-          console.log('WebSocket 연결 성공');
           resolve();
         },
         onStompError: (frame) => {
@@ -28,7 +26,6 @@ export class ChatService {
           reject(error);
         },
         onDisconnect: () => {
-          console.log('WebSocket 연결 해제됨');
         },
 
         // 연결 재시도 설정 추가
@@ -52,7 +49,6 @@ export class ChatService {
       
       this.stompClient.deactivate();
       this.stompClient = null;
-      console.log('WebSocket 연결 해제 완료');
     }
   }
 
@@ -69,14 +65,11 @@ export class ChatService {
           const chatMessage: WebSocketChatMessage = JSON.parse(message.body);
           onMessageReceived(chatMessage);
         } catch (error) {
-          console.error('메시지 파싱 에러:', error);
         }
       });
 
       this.subscriptions.set(roomId, subscription);
-      console.log(`채팅방 ${roomId} 구독 시작`);
     } else {
-      console.error('WebSocket 연결이 되어있지 않습니다.');
     }
   }
 
@@ -85,7 +78,6 @@ export class ChatService {
     if (this.subscriptions.has(roomId)) {
       this.subscriptions.get(roomId).unsubscribe();
       this.subscriptions.delete(roomId);
-      console.log(`채팅방 ${roomId} 구독 해제`);
     }
   }
 
@@ -105,9 +97,7 @@ export class ChatService {
         body: JSON.stringify(chatMessage)
       });
       
-      console.log('메시지 전송:', chatMessage);
     } else {
-      console.error('WebSocket 연결이 되어있지 않습니다.');
     }
   }
 
@@ -125,9 +115,7 @@ export class ChatService {
         body: JSON.stringify(readMessage)
       });
       
-      console.log('읽음 상태 전송:', readMessage);
     } else {
-      console.error('WebSocket 연결이 되어있지 않습니다.');
     }
   }
 

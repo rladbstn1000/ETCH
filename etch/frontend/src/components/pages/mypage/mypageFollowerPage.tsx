@@ -59,7 +59,6 @@ function MypageFollowerPage() {
       // 채팅 모달을 열고 해당 채팅방으로 이동
       openChatModal(chatRoom.roomId);
       
-      console.log("1:1 채팅방 생성/조회 성공:", chatRoom);
     } catch (error) {
       console.error("채팅방 생성 실패:", error);
       alert("채팅을 시작할 수 없습니다. 다시 시도해주세요.");
@@ -79,11 +78,9 @@ function MypageFollowerPage() {
       if (isCurrentlyFollowing) {
         await unfollowUser(userId);
         setFollowStatus(prev => ({ ...prev, [userId]: false }));
-        console.log("언팔로우 성공:", userId);
       } else {
         await followUser(userId);
         setFollowStatus(prev => ({ ...prev, [userId]: true }));
-        console.log("팔로우 성공:", userId);
       }
     } catch (error) {
       console.error("팔로우 토글 실패:", error);

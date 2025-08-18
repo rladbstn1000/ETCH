@@ -14,12 +14,10 @@ const chatInstance = axios.create({
 chatInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("access_token");
-    console.log("요청에 사용할 토큰:", accessToken); // 디버깅용
     
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     } else {
-      console.warn("토큰이 없어서 Authorization 헤더를 설정하지 않습니다.");
     }
     return config;
   },

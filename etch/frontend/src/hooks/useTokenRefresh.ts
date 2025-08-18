@@ -15,7 +15,6 @@ export const useTokenRefresh = (isAppInitialized = true) => {
       const isValid = await TokenManager.checkAndRefreshToken();
       
       if (!isValid) {
-        console.log("토큰 갱신 실패, 로그아웃 처리");
         logout();
         window.location.href = "/login";
       }

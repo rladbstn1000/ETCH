@@ -20,7 +20,6 @@ const OAuthLoadingPage = () => {
       const checkUser = async () => {
         try {
           const userInfo = await getMemberInfo();
-          console.log("사용자 정보:", userInfo);
           // Zustand 스토어에 사용자 정보 저장
           setMemberInfo(userInfo);
 

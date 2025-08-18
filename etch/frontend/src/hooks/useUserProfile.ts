@@ -20,10 +20,8 @@ export const useUserProfile = (userId?: number) => {
 
   useEffect(() => {
     // --- 1. 훅 시작 시점의 targetUserId 확인 ---
-    console.log("[useUserProfile] 훅 시작, targetUserId:", targetUserId);
 
     if (!targetUserId) {
-      console.log("[useUserProfile] targetUserId 없음, 로직 중단.");
       setIsLoading(false);
       return;
     }
@@ -31,14 +29,12 @@ export const useUserProfile = (userId?: number) => {
     const fetchUserProfile = async () => {
       setIsLoading(true);
       try {
-        console.log(`[useUserProfile] API 호출 시작 (ID: ${targetUserId})`);
         const [memberData, follows] = await Promise.all([
           getMemberById(targetUserId),
           getCountFollows(targetUserId),
         ]);
 
         // --- 2. API 성공 시 데이터 확인 ---
-        console.log("[useUserProfile] API 성공:", { memberData, follows });
 
         const finalData = {
           ...memberData,
@@ -47,7 +43,6 @@ export const useUserProfile = (userId?: number) => {
 
         setProfileData(finalData);
         // --- 3. 최종 데이터 확인 ---
-        console.log("[useUserProfile] 최종 profileData:", finalData);
       } catch (err) {
         // --- 4. 에러 발생 시 에러 내용 확인 ---
         console.error("[useUserProfile] API 호출 실패:", err);

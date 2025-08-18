@@ -99,7 +99,6 @@ function MypagePortfolioPage() {
         setProjectsError(null);
         const projects = await getMyProjects();
         setMyProjects(projects);
-        console.log("내 프로젝트 조회 성공:", projects.length, "개");
       } catch (error) {
         console.error("내 프로젝트 조회 실패:", error);
         setProjectsError("프로젝트 목록을 불러오는데 실패했습니다.");
@@ -226,36 +225,26 @@ function MypagePortfolioPage() {
   // ============== 기존 프로젝트 선택 관련 핸들러들 ==============
 
   const handleProjectSelect = (projectId: number, selected: boolean): void => {
-    console.log(`프로젝트 선택 변경: ID ${projectId}, 선택됨: ${selected}`);
-
     if (selected) {
       setSelectedProjectIds((prev) => {
         const newSelected = [...prev, projectId];
-        console.log("선택된 프로젝트 ID들 업데이트:", newSelected);
         return newSelected;
       });
     } else {
       setSelectedProjectIds((prev) => {
         const newSelected = prev.filter((id) => id !== projectId);
-        console.log("선택된 프로젝트 ID들 업데이트:", newSelected);
         return newSelected;
       });
     }
   };
 
   const handleSelectAllProjects = (): void => {
-    console.log("전체 선택/해제 클릭");
-    console.log("현재 선택된 프로젝트 수:", selectedProjectIds.length);
-    console.log("전체 프로젝트 수:", myProjects.length);
-
     if (selectedProjectIds.length === myProjects.length) {
       // 전체 해제
-      console.log("전체 해제 실행");
       setSelectedProjectIds([]);
     } else {
       // 전체 선택
       const allProjectIds = myProjects.map((project) => project.id);
-      console.log("전체 선택 실행, 선택할 ID들:", allProjectIds);
       setSelectedProjectIds(allProjectIds);
     }
   };
@@ -377,11 +366,6 @@ function MypagePortfolioPage() {
         return;
       }
 
-      console.log("=== 제출 시작 ===");
-      console.log("제출할 포트폴리오 데이터:", portfolioData);
-      console.log("선택된 기존 프로젝트 ID들:", selectedProjectIds);
-      console.log("새로 생성할 프로젝트들:", newProjectsCreated);
-
       // 1. 새로 생성된 프로젝트들을 실제로 생성
       const createdNewProjectIds: number[] = [];
 
@@ -401,7 +385,6 @@ function MypagePortfolioPage() {
             ),
           };
 
-          console.log(`새 프로젝트 "${project.title}" 생성 중...`);
           const createdProject = await createProject(projectInput);
 
           // createProject 응답에서 ID 추출
@@ -414,8 +397,6 @@ function MypagePortfolioPage() {
           } else if (typeof createdProject === "number") {
             createdNewProjectIds.push(createdProject);
           }
-
-          console.log(`새 프로젝트 "${project.title}" 생성 완료`);
         } catch (projectError) {
           console.error(
             `새 프로젝트 "${project.title}" 생성 실패:`,
@@ -438,24 +419,14 @@ function MypagePortfolioPage() {
         id,
       }));
 
-      console.log("=== 최종 프로젝트 ID 확인 ===");
-      console.log("선택된 기존 프로젝트 ID들:", selectedProjectIds);
-      console.log("새로 생성된 프로젝트 ID들:", createdNewProjectIds);
-      console.log("포트폴리오에 포함할 최종 프로젝트 ID들:", finalProjectIds);
-      console.log("API로 전송할 projectIds:", projectIds);
-
       // 3. portfolioData를 API 형식으로 변환
       const requestData = convertPortfolioDataToRequest(
         portfolioData,
         projectIds
       );
 
-      console.log("=== API 요청 데이터 ===");
-      console.log("convertPortfolioDataToRequest 결과:", requestData);
-
       // 4. 포트폴리오 생성 API 호출
-      const portfolioResponse = await createPortfolio(requestData);
-      console.log("포트폴리오 생성 성공:", portfolioResponse);
+      await createPortfolio(requestData);
 
       alert(`포트폴리오가 성공적으로 등록되었습니다!`);
 

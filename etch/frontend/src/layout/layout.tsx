@@ -29,24 +29,18 @@ function LayoutContent() {
       // 토큰은 있는데 로그인 상태가 아닌 경우
       if (token && !isLoggedIn) {
         try {
-          console.log("토큰 발견, 사용자 정보 복원 시도...");
 
           // 새로고침 시 토큰 갱신 시도
-          console.log("새로고침 시 토큰 갱신 시도...");
           const refreshSuccess = await TokenManager.refreshToken();
 
           if (refreshSuccess) {
-            console.log("새로고침 시 토큰 갱신 성공");
           } else {
-            console.log("새로고침 시 토큰 갱신 실패, 기존 토큰 사용");
           }
 
           // 토큰 갱신 성공/실패와 관계없이 사용자 정보 복원 시도
           const userInfo = await getMemberInfo();
           setMemberInfo(userInfo);
-          console.log("로그인 상태 복원 성공:", userInfo.nickname);
         } catch (error) {
-          console.log("토큰 무효, 삭제:", error);
           TokenManager.removeToken();
         }
       }

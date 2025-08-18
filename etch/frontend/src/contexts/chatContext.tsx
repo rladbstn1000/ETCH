@@ -201,7 +201,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       setCurrentRoom(null);
       setMessages([]);
       
-      console.log("Temporarily left room: {}", currentRoom.roomId);
     } catch (error) {
       console.error('임시 나가기 실패:', error);
     }
@@ -225,7 +224,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       // 채팅방 목록도 새로고침 (나간 방이 목록에서 사라져야 함)
       await loadRooms();
       
-      console.info("Permanently left room: %s", currentRoom.roomId);
     } catch (error) {
       console.error('완전 나가기 실패:', error);
     }
@@ -239,7 +237,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const currentUserName = getCurrentUserName();
     
     if (!currentUserId || !currentUserName) {
-      console.error('사용자 정보를 찾을 수 없습니다.');
       return;
     }
 

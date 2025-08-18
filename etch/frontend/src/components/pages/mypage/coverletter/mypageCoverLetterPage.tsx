@@ -33,7 +33,6 @@ function MyPageCoverLetterCreatePage() {
         answer4: answers[3] || "",
         answer5: answers[4] || "",
       };
-      console.log("자기소개서 생성 요청:", coverLetterData);
       await createCoverLetter(coverLetterData);
       alert("자기소개서가 성공적으로 생성되었습니다!");
       navigate("/mypage"); // Navigate to mypage or a success page

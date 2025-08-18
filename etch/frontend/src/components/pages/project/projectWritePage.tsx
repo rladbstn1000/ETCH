@@ -177,9 +177,8 @@ function ProjectWritePage() {
       };
 
       // API 호출
-      const result = await createProject(projectInput);
+      await createProject(projectInput);
 
-      console.log("프로젝트 생성 성공!", result);
       alert("프로젝트가 성공적으로 등록되었습니다!");
 
       // 성공 후 /projects 페이지로 이동

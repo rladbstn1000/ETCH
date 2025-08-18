@@ -140,8 +140,6 @@ function CalendarView({
   };
 
   const handleDatesSet = (dateInfo: any) => {
-    console.log("[CalendarView] handleDatesSet called with:", dateInfo);
-    
     // 현재 달력의 중심 날짜를 상위 컴포넌트에 전달 (날짜 상태 유지용)
     if (onDateChange) {
       const centerDate = new Date(dateInfo.view.currentStart);
@@ -155,45 +153,9 @@ function CalendarView({
     const endDate = new Date(dateInfo.end);
     endDate.setDate(endDate.getDate() - 1); // end는 다음날이므로 1일 빼기
 
-    console.log("[CalendarView] Processed dates:", {
-      originalStart: dateInfo.start,
-      originalEnd: dateInfo.end,
-      processedStart: startDate,
-      processedEnd: endDate,
-    });
-
-    // 여러 날짜 타입에 대응 가능한 포맷 함수
-    const formatDate = (date: Date | string) => {
-      if (typeof date === "string") {
-        // 이미 "YYYY-MM-DD" 형태라면 그대로 반환
-        if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-          return date;
-        }
-        // 다른 문자열 형태라면 Date 객체로 변환 후 처리
-        date = new Date(date);
-      }
-
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
-
-    console.log("[CalendarView] 달력 범위 변경:", {
-      startDate: formatDate(startDate),
-      endDate: formatDate(endDate),
-      startDateObj: startDate,
-      endDateObj: endDate,
-      rawStart: dateInfo.start,
-      rawEnd: dateInfo.end,
-      hasCallback: !!onDateRangeChange,
-    });
 
     if (onDateRangeChange) {
-      console.log("[CalendarView] Calling onDateRangeChange callback");
       onDateRangeChange(startDate, endDate);
-    } else {
-      console.log("[CalendarView] No onDateRangeChange callback provided");
     }
   };
 
@@ -376,7 +338,6 @@ function CalendarView({
         eventDisplay="block"
         dayMaxEvents={7}
         moreLinkClick={(info: any) => {
-          console.log("moreLinkClick info:", info);
 
           // 기존 FullCalendar popover 강제로 숨기기
           setTimeout(() => {

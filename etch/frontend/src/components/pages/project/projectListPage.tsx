@@ -78,51 +78,17 @@ function ProjectListPage() {
       searchTerm,
       selectedCategory,
     };
-
-    console.log("🔍 ProjectListPage 상태 업데이트:", {
-      projectsCount: projects.length,
-      selectedSort,
-      firstProject: projects[0]?.title,
-    });
   }, [projects, selectedSort, selectedCategory, searchTerm]);
 
   useEffect(() => {
     if (projects.length > 0) {
-      console.log("=== 프로젝트 데이터 구조 확인 ===");
-      console.log("전체 프로젝트 수:", projects.length);
-      console.log("첫 번째 프로젝트:", projects[0]);
-      console.log("사용 가능한 필드들:", Object.keys(projects[0]));
-
       // 각 프로젝트의 인기도 관련 필드 확인
-      const popularityData = projects.slice(0, 5).map((project) => ({
-        id: project.id,
-        title: project.title,
-        likeCount: project.likeCount,
-        popularityScore: project.popularityScore,
-        viewCount: project.viewCount,
-      }));
-
-      console.log("상위 5개 프로젝트의 인기도 데이터:", popularityData);
-
-      // 모든 프로젝트의 likeCount 분포 확인
-      const likeCounts = projects.map((p) => p.likeCount || 0);
-      const uniqueLikeCounts = [...new Set(likeCounts)];
-      console.log("likeCount 분포:", {
-        min: Math.min(...likeCounts),
-        max: Math.max(...likeCounts),
-        unique: uniqueLikeCounts,
-        allZero: likeCounts.every((count) => count === 0),
-      });
     }
   }, [projects]);
 
   const handleProjectUpdate = (updatedProject: ProjectData) => {
-    console.log("🔄 모달에서 프로젝트 업데이트 받음:", updatedProject);
-
     // ✅ popularityScore가 없으면 전체 데이터 새로고침
     if (updatedProject.popularityScore === undefined) {
-      console.log("📊 popularityScore가 없어서 전체 데이터 새로고침");
-
       const refreshAllData = async () => {
         try {
           const freshData = await getAllProjects();
@@ -186,7 +152,6 @@ function ProjectListPage() {
     }
 
     // 3. ✅ 클라이언트 사이드 정렬 (디버깅 로그 추가)
-    console.log("🎯 정렬 시작 - selectedSort:", selectedSort);
 
     filtered.sort((a, b) => {
       switch (selectedSort) {
@@ -199,10 +164,6 @@ function ProjectListPage() {
           const popularityA = Number(a.popularityScore || 0);
           const popularityB = Number(b.popularityScore || 0);
           const result = popularityB - popularityA;
-
-          console.log(
-            `인기순 비교: ${a.title}(${popularityA}) vs ${b.title}(${popularityB}) = ${result}`
-          );
 
           return result !== 0 ? result : (b.id || 0) - (a.id || 0);
         }
@@ -226,16 +187,6 @@ function ProjectListPage() {
         }
       }
     });
-
-    console.log(
-      "✅ 정렬 완료 - 상위 3개:",
-      filtered.slice(0, 3).map((p) => ({
-        id: p.id,
-        title: p.title,
-        popularityScore: p.popularityScore,
-        selectedSort,
-      }))
-    );
 
     return filtered;
   }, [projects, searchTerm, selectedCategory, selectedSort]);
@@ -266,14 +217,12 @@ function ProjectListPage() {
 
   // 카테고리 필터 핸들러
   const handleCategoryFilter = useCallback((category: string) => {
-    console.log("📂 ProjectListPage 카테고리 필터 받음:", category);
     setSelectedCategory(category);
     setCurrentPage(1);
   }, []);
 
   // ✅ 정렬 핸들러 - 디버깅 로그 추가
   const handleSortChange = useCallback((sortType: string) => {
-    console.log("🔥 ProjectListPage handleSortChange 받음:", sortType);
     setSelectedSort(sortType);
     setCurrentPage(1);
   }, []);
