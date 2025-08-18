@@ -71,13 +71,6 @@ class TokenManager {
   // 토큰 갱신
   static async refreshToken(): Promise<boolean> {
     try {
-      const currentTime = new Date().toLocaleString();
-      const tokenInfo = this.getTokenInfo();
-      
-      if (tokenInfo) {
-        const timeUntilExpiry = (tokenInfo.issuedAt + tokenInfo.expiresIn - Date.now()) / 1000 / 60;
-      }
-      
       const response = await defaultInstance.post("/auth/reissue", {});
       const newAccessToken = response.headers["authorization"];
       
@@ -90,8 +83,7 @@ class TokenManager {
       return true;
 
     } catch (error) {
-      const currentTime = new Date().toLocaleString();
-      console.error(`[${currentTime}] ❌ 토큰 갱신 실패:`, error);
+      console.error("❌ 토큰 갱신 실패:", error);
       
       // 갱신 실패 시 로그아웃 처리
       this.removeToken();
@@ -104,16 +96,10 @@ class TokenManager {
   // 토큰 상태 확인 및 필요시 갱신
   static async checkAndRefreshToken(): Promise<boolean> {
     const token = this.getToken();
-    const currentTime = new Date().toLocaleString();
     
     // 토큰이 없으면 로그인 필요
     if (!token) {
       return false;
-    }
-
-    const tokenInfo = this.getTokenInfo();
-    if (tokenInfo) {
-      const timeUntilExpiry = (tokenInfo.issuedAt + tokenInfo.expiresIn - Date.now()) / 1000 / 60;
     }
 
     // 토큰이 이미 만료되었으면 갱신 시도

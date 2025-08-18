@@ -4,28 +4,19 @@ import TokenManager from "./tokenManager";
 export const tokenDebug = {
   // 토큰 정보 출력
   showTokenInfo: () => {
-    const token = TokenManager.getToken();
-    const tokenInfo = TokenManager.getTokenInfo();
-    
-    
-    if (tokenInfo) {
-      const now = Date.now();
-      const expirationTime = tokenInfo.issuedAt + tokenInfo.expiresIn;
-      const remainingTime = expirationTime - now;
-      const remainingMinutes = Math.floor(remainingTime / (1000 * 60));
-      
-    }
+    TokenManager.getToken();
+    TokenManager.getTokenInfo();
   },
 
   // 강제로 토큰 갱신
   forceRefresh: async () => {
-    const success = await TokenManager.refreshToken();
+    await TokenManager.refreshToken();
     tokenDebug.showTokenInfo();
   },
 
   // 토큰 상태 체크
   checkToken: async () => {
-    const isValid = await TokenManager.checkAndRefreshToken();
+    await TokenManager.checkAndRefreshToken();
     tokenDebug.showTokenInfo();
   },
 
