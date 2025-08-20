@@ -8,7 +8,13 @@ function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div>
             <div className="flex items-center justify-center mb-4 md:justify-start">
-              <img src={logo} alt="로고" className="w-36 h-13s" />
+              <img
+                src={logo}
+                alt="로고"
+                className="w-36 md:w-40"
+                width={144}
+                height={52}
+              />
             </div>
             <p className="text-sm text-center text-gray-600 md:text-left">
               IT 취업 준비를 위한 모든 것을 한 곳에서 제공하는 플랫폼입니다.

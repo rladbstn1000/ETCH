@@ -140,6 +140,7 @@ function HomePage() {
                       alt={`ETCH 플랫폼 소개 ${index + 1}`}
                       className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                       loading={index === 0 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       decoding="async"
                       width={600}
                       height={450}
