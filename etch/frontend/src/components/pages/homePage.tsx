@@ -143,6 +143,7 @@ function HomePage() {
                       decoding="async"
                       width={600}
                       height={450}
+                      style={{ aspectRatio: '4/3', minHeight: '450px' }}
                     />
                   </div>
                 ))}
