@@ -49,9 +49,6 @@ const MypageFavoritePage = lazy(
   () => import("../components/pages/mypage/mypageFavoritePage.tsx")
 );
 
-const DetailFavoriteCompany = lazy(
-  () => import("../components/pages/mypage/favorite/detailFavoriteCompany.tsx")
-);
 const DetailFavoriteProject = lazy(
   () => import("../components/pages/mypage/favorite/detailFavoriteProject.tsx")
 );
@@ -251,14 +248,6 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingPage />}>
                 <MypageFavoritePage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "favorites/companies",
-            element: (
-              <Suspense fallback={<LoadingPage />}>
-                <DetailFavoriteCompany />
               </Suspense>
             ),
           },

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router";
 import HeaderSearch from "../organisms/header/headerSearch";
-import LogoImg from "../../assets/logo.png";
+import LogoImg from "../../assets/logo.webp";
 import HeaderAuth from "../organisms/header/headerAuth";
 
 function Header() {

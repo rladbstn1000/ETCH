@@ -14,11 +14,11 @@ import type { News } from "../../types/newsTypes";
 import useUserStore from "../../store/userStore";
 
 // Landing 이미지들 import
-import landing1 from "../../assets/landing/landing1.jpg";
-import landing2 from "../../assets/landing/landing2.jpg";
-import landing3 from "../../assets/landing/landing3.jpg";
-import landing4 from "../../assets/landing/landing4.jpg";
-import landing5 from "../../assets/landing/landing5.jpg";
+import landing1 from "../../assets/landing/landing1.webp";
+import landing2 from "../../assets/landing/landing2.webp";
+import landing3 from "../../assets/landing/landing3.webp";
+import landing4 from "../../assets/landing/landing4.webp";
+import landing5 from "../../assets/landing/landing5.webp";
 
 function HomePage() {
   const [latestNewsData, setLatestNewsData] = useState<News[]>([]);
@@ -175,29 +175,29 @@ function HomePage() {
         {/* 채용 정보 */}
         <section className="px-6 py-8 bg-white shadow-sm rounded-lg sm:py-10">
           <div className="flex items-center mb-6 space-x-3">
-              <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-xl">
-                <svg
-                  className="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6z"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                마감 임박 채용
-              </h2>
-              <div className="flex-1"></div>
-              <Link to={"/jobs"}>
-                <SeeMore />
-              </Link>
+            <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-xl">
+              <svg
+                className="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6z"
+                />
+              </svg>
             </div>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              마감 임박 채용
+            </h2>
+            <div className="flex-1"></div>
+            <Link to={"/jobs"}>
+              <SeeMore />
+            </Link>
+          </div>
           <ExpiringJobsCarousel
             jobs={expiringJobs}
             onJobClick={handleJobClick}
@@ -209,65 +209,65 @@ function HomePage() {
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
           {/* 인기 프로젝트 카드 - 2/3 너비 */}
           <section className="xl:col-span-2 px-6 py-8 bg-white shadow-sm rounded-lg sm:py-10">
-              <div className="flex flex-col mb-6 space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-xl">
-                    <ProjectSVG />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                    인기 프로젝트
-                  </h2>
+            <div className="flex flex-col mb-6 space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-xl">
+                  <ProjectSVG />
                 </div>
-                <Link to={"/projects"}>
-                  <SeeMore />
-                </Link>
+                <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+                  인기 프로젝트
+                </h2>
               </div>
-              <HomeProjectCard />
-            </section>
+              <Link to={"/projects"}>
+                <SeeMore />
+              </Link>
+            </div>
+            <HomeProjectCard />
+          </section>
 
           {/* 뉴스 카드 - 1/3 너비 */}
           <section className="xl:col-span-1 px-6 py-8 bg-white shadow-sm rounded-lg sm:py-10">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-xl">
-                    <svg
-                      className="w-5 h-5 text-blue-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                      />
-                    </svg>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                    뉴스
-                  </h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-xl">
+                  <svg
+                    className="w-5 h-5 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                    />
+                  </svg>
                 </div>
-                <Link to={"/news"}>
-                  <SeeMore />
-                </Link>
+                <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+                  뉴스
+                </h2>
               </div>
-              <HomeNewsCard newsData={latestNewsData} />
+              <Link to={"/news"}>
+                <SeeMore />
+              </Link>
+            </div>
+            <HomeNewsCard newsData={latestNewsData} />
           </section>
         </div>
 
         {/* 주요 기능 소개 */}
         <section className="px-6 py-12 bg-white shadow-sm rounded-lg sm:py-16">
-        <div className="mb-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
-            ETCH의 주요 기능
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg leading-relaxed text-gray-600">
-            IT 취업 성공을 위한 모든 도구와 정보를 하나의 플랫폼에서
-            만나보세요
-          </p>
-        </div>
-        <HomeFuncComponent funcData={funcData} />
+          <div className="mb-8 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+              ETCH의 주요 기능
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg leading-relaxed text-gray-600">
+              IT 취업 성공을 위한 모든 도구와 정보를 하나의 플랫폼에서
+              만나보세요
+            </p>
+          </div>
+          <HomeFuncComponent funcData={funcData} />
         </section>
       </div>
 
