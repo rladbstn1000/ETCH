@@ -1,15 +1,19 @@
-import type { mockJobData } from "../../../types/mock/mockJobData";
+import type { Job } from "../../../types/job";
 import JobCard from "../../molecules/home/jobCard";
 
 interface Props {
-  mockJobs: mockJobData[];
+  jobs: Job[];
 }
 
-function HomeJobCard({ mockJobs }: Props) {
+function HomeJobCard({ jobs }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {mockJobs.slice(0, 3).map((job) => (
-        <JobCard type="job" {...job} />
+      {jobs.slice(0, 3).map((job) => (
+        <JobCard 
+          type="job" 
+          {...job}
+          createTime={new Date(job.openingDate)}
+        />
       ))}
     </div>
   );

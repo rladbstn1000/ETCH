@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import CoverLetterInfoSection from "../../../molecules/mypage/coverLetterInfoSection";
 import QuestionList from "../../../organisms/mypage/questionList";
-import { mockQuestions } from "../../../../types/mock/mockQuestionData";
+import { getStandardQuestions } from "../../../../types/coverLetter";
 import CoverLetterActions from "../../../organisms/mypage/coverLetterActions";
 import {
   getCoverLetterDetail,
@@ -112,7 +112,7 @@ function MyPageCoverLetterEditPage() {
         onChange={setCoverLetterName}
       />
       <QuestionList
-        questions={mockQuestions}
+        questions={getStandardQuestions(answers, handleAnswerChange)}
         answers={answers}
         onAnswerChange={handleAnswerChange}
       />
