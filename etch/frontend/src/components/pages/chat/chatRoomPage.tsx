@@ -50,7 +50,6 @@ export default function ChatRoomPage() {
   };
 
   const handleFileUpload = () => {
-    console.log("File upload");
     // TODO: 파일 업로드 로직 - 추후 구현
   };
 

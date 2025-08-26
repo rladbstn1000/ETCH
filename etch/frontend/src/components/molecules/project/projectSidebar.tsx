@@ -31,10 +31,6 @@ function ProjectSidebar({
                 type="checkbox"
                 checked={item.checked}
                 onChange={(e) => {
-                  console.log("📂 카테고리 체크박스 클릭:", {
-                    checked: e.target.checked,
-                    value: item.value,
-                  });
                   onChange(e.target.checked, item.value);
                 }}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -62,10 +58,6 @@ function ProjectSidebar({
                 value={item.value}
                 checked={item.checked}
                 onChange={() => {
-                  console.log("🎯 정렬 라디오 버튼 클릭:", {
-                    value: item.value,
-                    checked: true,
-                  });
                   onSortChange(true, item.value);
                 }}
                 className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"

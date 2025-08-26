@@ -33,7 +33,6 @@ function MypageFollowingPage() {
       // targetRoomId만 설정하면 ChatModalContainer에서 자동으로 처리됨
       openChatModal(chatRoom.roomId);
       
-      console.log("1:1 채팅방 준비 완료:", chatRoom);
     } catch (error) {
       console.error("채팅방 생성 실패:", error);
       alert("채팅을 시작할 수 없습니다. 다시 시도해주세요.");
@@ -53,7 +52,6 @@ function MypageFollowingPage() {
       if (isCurrentlyFollowing) {
         await unfollowUser(userId);
         setUnfollowedUsers(prev => new Set([...prev, userId]));
-        console.log("언팔로우 성공:", userId);
       } else {
         await followUser(userId);
         setUnfollowedUsers(prev => {
@@ -61,7 +59,6 @@ function MypageFollowingPage() {
           newSet.delete(userId);
           return newSet;
         });
-        console.log("팔로우 성공:", userId);
       }
     } catch (error) {
       console.error("팔로우/언팔로우 실패:", error);

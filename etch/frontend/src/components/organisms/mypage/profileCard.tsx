@@ -59,7 +59,7 @@ const ProfileCard = ({ userProfile }: ProfileCardProps) => {
           <ProfileAvatar
             src={profile || ""}
             alt={`${nickname}의 프로필`}
-            onClick={() => console.log("프로필 편집")}
+            onClick={() => {}}
           />
 
           <div>
@@ -81,7 +81,7 @@ const ProfileCard = ({ userProfile }: ProfileCardProps) => {
                 text="포트폴리오 생성"
                 bgColor="bg-blue-600"
                 textColor="text-white"
-                onClick={() => console.log("포트폴리오 생성")}
+                onClick={() => {}}
               />
             </Link>
             <Link to="/mypage/coverletters" className="block">
@@ -89,7 +89,7 @@ const ProfileCard = ({ userProfile }: ProfileCardProps) => {
                 text="자기소개서 생성"
                 bgColor="border border-gray-300 bg-transparent"
                 textColor="text-black"
-                onClick={() => console.log("자소서 생성")}
+                onClick={() => {}}
               />
             </Link>
             <ActionButton

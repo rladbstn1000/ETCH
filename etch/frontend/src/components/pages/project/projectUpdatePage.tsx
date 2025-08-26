@@ -112,9 +112,7 @@ function ProjectUpdatePage() {
 
       if (foundTech) {
         mappedIds.push(foundTech.id);
-        console.log(`기술 스택 매핑: ${techName} -> ID ${foundTech.id}`);
       } else {
-        console.warn(`기술 스택을 찾을 수 없음: ${techName}`);
       }
     });
 
@@ -155,18 +153,12 @@ function ProjectUpdatePage() {
           parseInt(id)
         );
 
-        console.log("=== 프로젝트 수정 페이지 데이터 디버깅 ===");
-        console.log("전체 프로젝트 데이터:", project);
-        console.log("기술 스택 이름들:", project.techCodes);
-        console.log("파일 URL들:", project.fileUrls);
 
         // 🔥 기술 스택 이름을 ID로 변환
         const mappedTechIds = mapTechNamesToIds(project.techCodes || []);
-        console.log("매핑된 기술 스택 ID들:", mappedTechIds);
 
         // 🔥 파일 URL들을 ExistingFile 형태로 변환
         const mappedFiles = mapFileUrlsToExistingFiles(project.fileUrls || []);
-        console.log("매핑된 파일들:", mappedFiles);
 
         // 폼 데이터 설정
         const updatedFormData = {
@@ -180,16 +172,12 @@ function ProjectUpdatePage() {
           files: [], // 새로 추가할 파일들만
         };
 
-        console.log("=== 설정될 폼 데이터 ===");
-        console.log("폼 데이터:", updatedFormData);
-        console.log("추출된 기술 스택 ID들:", updatedFormData.projectTechs);
 
         setFormData(updatedFormData);
 
         // 기존 썸네일 설정
         if (project.thumbnailUrl) {
           setExistingThumbnailUrl(project.thumbnailUrl);
-          console.log("기존 썸네일 설정:", project.thumbnailUrl);
         }
 
         // 🔥 파일들 분리 (이미지 vs PDF)
@@ -204,14 +192,10 @@ function ProjectUpdatePage() {
           }
         });
 
-        console.log("=== 파일 분리 결과 ===");
-        console.log("이미지 파일들:", images);
-        console.log("PDF 파일:", pdfFile);
 
         setExistingFiles(images);
         setExistingPdf(pdfFile);
 
-        console.log("=== 데이터 로딩 완료 ===");
       } catch (error) {
         console.error("프로젝트 로드 실패:", error);
         alert("프로젝트를 불러올 수 없습니다.");
@@ -242,17 +226,14 @@ function ProjectUpdatePage() {
   };
 
   const handleCategoryChange = (category: ProjectCategoryEnum) => {
-    console.log("카테고리 변경:", category);
     setFormData((prev) => ({ ...prev, projectCategory: category }));
   };
 
   const handleIsPublicChange = (isPublic: boolean) => {
-    console.log("공개 설정 변경:", isPublic);
     setFormData((prev) => ({ ...prev, isPublic }));
   };
 
   const handleStacksChange = (techId: number) => {
-    console.log("기술 스택 변경 시도:", techId);
     setFormData((prev) => {
       const currentIds = prev.projectTechs;
       const isSelected = currentIds.includes(techId);
@@ -260,10 +241,8 @@ function ProjectUpdatePage() {
       let newIds;
       if (isSelected) {
         newIds = currentIds.filter((id) => id !== techId);
-        console.log("기술 스택 제거:", techId, "남은 ID들:", newIds);
       } else {
         newIds = [...currentIds, techId];
-        console.log("기술 스택 추가:", techId, "전체 ID들:", newIds);
       }
 
       return { ...prev, projectTechs: newIds };
@@ -360,8 +339,6 @@ function ProjectUpdatePage() {
         removePdf,
       };
 
-      console.log("=== 제출할 데이터 ===");
-      console.log("projectInput:", projectInput);
 
       // API 호출
       await updateProject(parseInt(id), projectInput);
@@ -389,10 +366,6 @@ function ProjectUpdatePage() {
   }
 
   // 🔧 디버깅: 현재 상태를 콘솔에 주기적으로 출력
-  console.log("=== 현재 렌더링 상태 ===");
-  console.log("현재 formData:", formData);
-  console.log("선택된 기술 스택 ID들:", formData.projectTechs);
-  console.log("선택된 카테고리:", formData.projectCategory);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">

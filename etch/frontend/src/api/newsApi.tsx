@@ -44,7 +44,6 @@ interface PageResponse<T> {
 export async function LatestNewsData(): Promise<News[]> {
   try {
     const res = await axios.get(`${BASE_API}/news/latest`);
-    console.log("최신 뉴스 응답:", res.data);
 
     // 🔥 페이지네이션 응답에서 content 배열 추출
     const pageData = res.data.data;
@@ -66,7 +65,6 @@ export async function getLatestNewsPaginated(
     const res = await axios.get(
       `${BASE_API}/news/latest?page=${page}&size=${size}`
     );
-    console.log("페이지네이션된 최신 뉴스 응답:", res.data);
 
     return res.data.data;
   } catch (error) {
@@ -120,7 +118,6 @@ export async function getCompanyNewsPaginated(
     const res = await axios.get(
       `${BASE_API}/news/companies/${companyId}?page=${page}&size=${size}`
     );
-    console.log("페이지네이션된 회사 뉴스 응답:", res.data);
 
     // 전체 페이지네이션 정보 반환
     return res.data.data;
@@ -135,7 +132,6 @@ export async function TopCompaniesData(): Promise<TopCompany[]> {
     const res = await axios.get<ApiResponse<PageResponse<TopCompany>>>(
       `${BASE_API}/news/top-companies`
     );
-    console.log("상위 회사 응답:", res.data);
 
     // 🔥 페이지네이션이 적용되었다면 content 추출, 아니라면 그대로 반환
     const data = res.data.data;

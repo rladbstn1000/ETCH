@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router";
 import HeaderSearch from "../organisms/header/headerSearch";
-import LogoImg from "../../assets/logo.png";
+import LogoImg from "../../assets/logo.webp";
 import HeaderAuth from "../organisms/header/headerAuth";
 
 function Header() {
@@ -31,7 +31,13 @@ function Header() {
             to={"/"}
             className="transition-transform duration-200 hover:scale-105"
           >
-            <img src={LogoImg} alt="ETCH 로고" className="w-36 md:w-40" />
+            <img 
+              src={LogoImg} 
+              alt="ETCH 로고" 
+              className="w-36 md:w-40" 
+              width={144}
+              height={52}
+            />
           </Link>
 
           {/* 네비게이션 메뉴 */}

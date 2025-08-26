@@ -7,9 +7,12 @@ function ProcjectCard({ id, title, content, thumbnailUrl }: ProjectCardProps) {
       <Link to={`/projects/${id}`}>
         <section className="w-full h-36">
           <img
-            className="w-full object-cover h-full "
+            className="w-full object-cover h-full"
             src={thumbnailUrl}
             alt="카드 이미지"
+            width={400}
+            height={144}
+            style={{ aspectRatio: '400/144' }}
           />
         </section>
         <section className="p-3 sm:p-4">

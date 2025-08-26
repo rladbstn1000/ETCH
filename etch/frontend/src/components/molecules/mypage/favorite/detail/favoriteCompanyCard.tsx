@@ -9,7 +9,6 @@ function FavoriteCompanyCard({ companyName, img }: FavoriteCompanyProps) {
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
     // 여기에 API 호출이나 상태 업데이트 로직 추가
-    console.log(`${companyName} 즐겨찾기 ${isFavorited ? "해제" : "추가"}`);
   };
   return (
     <div className="relative flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 w-full">

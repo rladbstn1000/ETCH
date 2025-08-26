@@ -67,7 +67,6 @@ function Pagination({
                 disabled={isFirstPage}
                 onClick={() => {
                   if (!isFirstPage) {
-                    console.log(`이전 페이지 클릭: ${currentPage - 1}`);
                     onPageChange(currentPage - 1);
                   }
                 }}
@@ -94,7 +93,6 @@ function Pagination({
                   <button
                     className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors"
                     onClick={() => {
-                      console.log(`첫 페이지 클릭: 1`);
                       onPageChange(1);
                     }}
                   >
@@ -116,9 +114,6 @@ function Pagination({
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                   onClick={() => {
-                    console.log(
-                      `페이지 ${page} 클릭 (현재 페이지: ${currentPage})`
-                    );
                     onPageChange(page);
                   }}
                 >
@@ -135,7 +130,6 @@ function Pagination({
                   <button
                     className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors"
                     onClick={() => {
-                      console.log(`마지막 페이지 클릭: ${totalPages}`);
                       onPageChange(totalPages);
                     }}
                   >
@@ -150,7 +144,6 @@ function Pagination({
                 disabled={isLast}
                 onClick={() => {
                   if (!isLast) {
-                    console.log(`다음 페이지 클릭: ${currentPage + 1}`);
                     onPageChange(currentPage + 1);
                   }
                 }}

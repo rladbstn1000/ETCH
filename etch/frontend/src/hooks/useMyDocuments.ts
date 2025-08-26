@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { getCoverLetters } from "../api/coverLetterApi";
 import { getMyPortfolios } from "../api/portfolioApi"; // 새로 추가한 포트폴리오 API
 import type { CoverLetterListResponse } from "../types/coverLetter";
-// import { mockPortfolios } from "../types/mock/mockDocumentsData"; // 더 이상 사용하지 않음
 
 // 포트폴리오 목록 타입 정의 (API 응답과 일치)
 interface PortfolioListItem {

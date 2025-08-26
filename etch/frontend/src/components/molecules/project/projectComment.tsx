@@ -18,12 +18,6 @@ function ProjectComment({
   const isAuthor = currentUserId === comment.memberId;
   
   // 디버깅용 로그 (권한 확인을 위해 유지)
-  console.log("댓글 권한 확인:", {
-    commentId: comment.id,
-    commentMemberId: comment.memberId,
-    currentUserId: currentUserId,
-    isAuthor: isAuthor,
-  });
   
   // 시간 포맷팅 함수
   const formatDateTime = (timeString: string) => {

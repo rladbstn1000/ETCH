@@ -47,9 +47,6 @@ function NewsPage() {
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
-    console.log("=== 페이지 변경 핸들러 ===");
-    console.log("클릭된 페이지:", page);
-    console.log("현재 페이지 상태:", newsPageData.currentPage);
     loadNewsData(page);
   };
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import CoverLetterInfoSection from "../../../molecules/mypage/coverLetterInfoSection";
 import QuestionList from "../../../organisms/mypage/questionList";
-import { mockQuestions } from "../../../../types/mock/mockQuestionData";
+import { getStandardQuestions } from "../../../../types/coverLetter";
 import CoverLetterActions from "../../../organisms/mypage/coverLetterActions";
 import { createCoverLetter } from "../../../../api/coverLetterApi"; // Import API function
 import type { CoverLetterRequest } from "../../../../types/coverLetter"; // Import type
@@ -33,7 +33,6 @@ function MyPageCoverLetterCreatePage() {
         answer4: answers[3] || "",
         answer5: answers[4] || "",
       };
-      console.log("자기소개서 생성 요청:", coverLetterData);
       await createCoverLetter(coverLetterData);
       alert("자기소개서가 성공적으로 생성되었습니다!");
       navigate("/mypage"); // Navigate to mypage or a success page
@@ -59,7 +58,7 @@ function MyPageCoverLetterCreatePage() {
         onChange={setCoverLetterName}
       />
       <QuestionList
-        questions={mockQuestions}
+        questions={getStandardQuestions(answers, handleAnswerChange)}
         answers={answers}
         onAnswerChange={handleAnswerChange}
       />

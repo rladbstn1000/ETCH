@@ -71,15 +71,6 @@ class TokenManager {
   // 토큰 갱신
   static async refreshToken(): Promise<boolean> {
     try {
-      const currentTime = new Date().toLocaleString();
-      const tokenInfo = this.getTokenInfo();
-      
-      console.log(`[${currentTime}] 토큰 갱신 시도 중...`);
-      if (tokenInfo) {
-        const timeUntilExpiry = (tokenInfo.issuedAt + tokenInfo.expiresIn - Date.now()) / 1000 / 60;
-        console.log(`현재 토큰 만료까지 ${timeUntilExpiry.toFixed(1)}분 남음`);
-      }
-      
       const response = await defaultInstance.post("/auth/reissue", {});
       const newAccessToken = response.headers["authorization"];
       
@@ -89,12 +80,10 @@ class TokenManager {
 
       // 새로운 토큰 저장
       this.setToken(newAccessToken);
-      console.log(`[${currentTime}] ✅ 토큰 갱신 성공! 새 토큰 30분 유효`);
       return true;
 
     } catch (error) {
-      const currentTime = new Date().toLocaleString();
-      console.error(`[${currentTime}] ❌ 토큰 갱신 실패:`, error);
+      console.error("❌ 토큰 갱신 실패:", error);
       
       // 갱신 실패 시 로그아웃 처리
       this.removeToken();
@@ -107,34 +96,23 @@ class TokenManager {
   // 토큰 상태 확인 및 필요시 갱신
   static async checkAndRefreshToken(): Promise<boolean> {
     const token = this.getToken();
-    const currentTime = new Date().toLocaleString();
     
     // 토큰이 없으면 로그인 필요
     if (!token) {
-      console.log(`[${currentTime}] 토큰 없음 - 로그인 필요`);
       return false;
-    }
-
-    const tokenInfo = this.getTokenInfo();
-    if (tokenInfo) {
-      const timeUntilExpiry = (tokenInfo.issuedAt + tokenInfo.expiresIn - Date.now()) / 1000 / 60;
-      console.log(`[${currentTime}] 현재 토큰 상태: ${timeUntilExpiry.toFixed(1)}분 후 만료`);
     }
 
     // 토큰이 이미 만료되었으면 갱신 시도
     if (this.isTokenExpired()) {
-      console.log(`[${currentTime}] 토큰이 만료되었습니다. 갱신 시도 중...`);
       return await this.refreshToken();
     }
 
     // 토큰 갱신이 필요한 시점이면 갱신
     if (this.shouldRefreshToken()) {
-      console.log(`[${currentTime}] 토큰 갱신 시점입니다(5분 전). 갱신 시도 중...`);
       return await this.refreshToken();
     }
 
     // 토큰이 유효함
-    console.log(`[${currentTime}] 토큰 유효 - 갱신 불필요`);
     return true;
   }
 
@@ -145,7 +123,6 @@ class TokenManager {
 
     if (token && !tokenInfo) {
       // 기존 토큰이 있지만 정보가 없으면 현재 시간으로 초기화
-      console.log("토큰 정보 초기화 중...");
       this.setToken(token);
     }
   }

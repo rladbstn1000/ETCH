@@ -78,7 +78,7 @@ export interface NewsSearchFilters {
 export interface ProjectSearchFilters {
   keyword?: string;
   category?: string;
-  sort?: 'LATEST' | 'POPULAR';
+  sort?: "LATEST" | "POPULAR";
   page?: number;
   size?: number;
 }

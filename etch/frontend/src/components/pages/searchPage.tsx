@@ -81,7 +81,6 @@ function SearchPage() {
   const handleSearch = async (searchQuery: string) => {
     try {
       const results = await searchAll(searchQuery, 0, 4);
-      console.log("검색 결과:", results);
       setSearchResults(results);
     } catch (error) {
       console.error("검색 실패:", error);
@@ -209,11 +208,6 @@ function SearchPage() {
   const convertProjectSearchResultToProjectData = (
     projectSearchResult: any // 실제 백엔드 응답 구조를 반영
   ): ProjectData => {
-    console.log("=== 검색 결과 데이터 ===", projectSearchResult);
-    console.log("likeCount:", projectSearchResult.likeCount);
-    console.log("viewCount:", projectSearchResult.viewCount);
-    console.log("likedByMe 필드 존재?:", "likedByMe" in projectSearchResult);
-
     const converted = {
       id: projectSearchResult.projectId || projectSearchResult.id, // 백엔드는 projectId 사용
       title: projectSearchResult.title,
@@ -241,11 +235,6 @@ function SearchPage() {
       techCategories: [],
       projectTechs: [],
     };
-    console.log("=== 변환된 데이터 ===");
-    console.log("id:", converted.id);
-    console.log("likeCount:", converted.likeCount);
-    console.log("viewCount:", converted.viewCount);
-    console.log("likedByMe:", converted.likedByMe);
     return converted;
   };
 
@@ -514,12 +503,9 @@ function SearchPage() {
                       projects={searchResults.projects.content
                         .slice(0, 4)
                         .map(convertProjectSearchResultToProjectData)}
-                      onProjectUpdate={(updatedProject) => {
+                      onProjectUpdate={() => {
                         // 전체 탭의 프로젝트 업데이트 - 전체 검색 결과 새로고침
-                        console.log(
-                          "Project updated in all tab, refreshing search:",
-                          updatedProject
-                        );
+
                         // 전체 검색 결과 새로고침
                         setTimeout(() => {
                           handleSearch(query);
@@ -654,12 +640,9 @@ function SearchPage() {
                     projects={projectResults.content.map(
                       convertProjectSearchResultToProjectData
                     )}
-                    onProjectUpdate={(updatedProject) => {
+                    onProjectUpdate={() => {
                       // 프로젝트 탭 업데이트 - 현재 페이지 새로고침
-                      console.log(
-                        "Project updated in projects tab, refreshing page:",
-                        updatedProject
-                      );
+
                       // 현재 페이지 데이터 새로고침
                       setTimeout(() => {
                         loadProjectResults(projectPage);

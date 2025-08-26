@@ -16,10 +16,9 @@ interface ApiResponse<T> {
  */
 export const applyJob = async (jobId: number): Promise<void> => {
   try {
-    const response = await authInstance.post<ApiResponse<null>>(
+    await authInstance.post<ApiResponse<null>>(
       `/appliedJobs/${jobId}`
     );
-    console.log('지원하기 성공:', response.data.message);
   } catch (error) {
     console.error(`Job ${jobId} 지원 실패:`, error);
     throw error;
@@ -49,11 +48,10 @@ export const updateAppliedJobStatus = async (
   updateData: AppliedJobUpdateRequest
 ): Promise<void> => {
   try {
-    const response = await authInstance.put<ApiResponse<null>>(
+    await authInstance.put<ApiResponse<null>>(
       `/appliedJobs/${appliedJobId}`,
       updateData
     );
-    console.log('지원 상태 업데이트 성공:', response.data.message);
   } catch (error) {
     console.error(`AppliedJob ${appliedJobId} 상태 업데이트 실패:`, error);
     throw error;
@@ -65,10 +63,9 @@ export const updateAppliedJobStatus = async (
  */
 export const deleteAppliedJob = async (appliedJobId: number): Promise<void> => {
   try {
-    const response = await authInstance.delete<ApiResponse<null>>(
+    await authInstance.delete<ApiResponse<null>>(
       `/appliedJobs/${appliedJobId}`
     );
-    console.log('지원 삭제 성공:', response.data.message);
   } catch (error) {
     console.error(`AppliedJob ${appliedJobId} 삭제 실패:`, error);
     throw error;

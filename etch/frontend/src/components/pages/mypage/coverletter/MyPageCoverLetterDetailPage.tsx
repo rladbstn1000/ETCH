@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getCoverLetterDetail } from "../../../../api/coverLetterApi";
 import type { CoverLetterDetailResponse } from "../../../../types/coverLetter";
-import { mockQuestions } from "../../../../types/mock/mockQuestionData"; // To display questions
+import { COVER_LETTER_QUESTIONS_STATIC } from "../../../../types/coverLetter";
 
 function MyPageCoverLetterDetailPage() {
   const navigate = useNavigate();
@@ -93,7 +93,7 @@ function MyPageCoverLetterDetailPage() {
         <div className="space-y-6">
           {" "}
           {/* Consistent spacing */}
-          {mockQuestions.map((question, index) => (
+          {COVER_LETTER_QUESTIONS_STATIC.map((question, index) => (
             <div key={index} className="space-y-2">
               {" "}
               {/* Simple question/answer grouping */}

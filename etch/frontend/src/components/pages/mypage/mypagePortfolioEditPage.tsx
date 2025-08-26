@@ -117,10 +117,7 @@ function MypagePortfolioPageEdit() {
         setIsLoading(true);
         setLoadError(null);
 
-        console.log("포트폴리오 데이터 로드 중...", portfolioId);
         const portfolioDetail = await getPortfolioDetail(Number(portfolioId));
-
-        console.log("로드된 포트폴리오 데이터:", portfolioDetail);
 
         // 백엔드 데이터를 프론트엔드 형식으로 변환
         const convertedData = convertBackendDataToFrontend(portfolioDetail);
@@ -138,10 +135,7 @@ function MypagePortfolioPageEdit() {
             .filter((id): id is number => typeof id === "number");
 
           setSelectedProjectIds(existingProjectIds);
-          console.log("포트폴리오에 포함된 프로젝트 ID들:", existingProjectIds);
         }
-
-        console.log("포트폴리오 데이터 로드 완료");
       } catch (error) {
         console.error("포트폴리오 데이터 로드 실패:", error);
         setLoadError("포트폴리오 데이터를 불러오는데 실패했습니다.");
@@ -161,7 +155,6 @@ function MypagePortfolioPageEdit() {
         setProjectsError(null);
         const projects = await getMyProjects();
         setAllMyProjects(projects);
-        console.log("전체 프로젝트 조회 성공:", projects.length, "개");
       } catch (error) {
         console.error("프로젝트 조회 실패:", error);
         setProjectsError("프로젝트 목록을 불러오는데 실패했습니다.");
@@ -405,11 +398,6 @@ function MypagePortfolioPageEdit() {
         return;
       }
 
-      console.log("=== 포트폴리오 수정 시작 ===");
-      console.log("포트폴리오 ID:", portfolioId);
-      console.log("현재 선택된 프로젝트 ID들:", selectedProjectIds);
-      console.log("새로 생성할 프로젝트들:", newProjectsCreated);
-
       // 1. 새로 생성된 프로젝트들을 실제로 생성
       const createdNewProjectIds: number[] = [];
 
@@ -429,7 +417,6 @@ function MypagePortfolioPageEdit() {
             ),
           };
 
-          console.log(`새 프로젝트 "${project.title}" 생성 중...`);
           const createdProject = await createProject(projectInput);
 
           let projectId: number | null = null;
@@ -444,9 +431,6 @@ function MypagePortfolioPageEdit() {
 
           if (projectId && typeof projectId === "number") {
             createdNewProjectIds.push(projectId);
-            console.log(
-              `새 프로젝트 "${project.title}" 생성 완료, ID: ${projectId}`
-            );
           } else {
             console.error(
               `새 프로젝트 "${project.title}" ID 추출 실패:`,
@@ -471,21 +455,14 @@ function MypagePortfolioPageEdit() {
         id,
       }));
 
-      console.log("=== 🎯 최종 포트폴리오 프로젝트 구성 ===");
-      console.log("현재 선택된 기존 프로젝트들:", selectedProjectIds);
-      console.log("새로 생성된 프로젝트들:", createdNewProjectIds);
-      console.log("최종 포트폴리오에 포함될 프로젝트들:", finalProjectIds);
-
       // 3. portfolioData를 API 형식으로 변환
       const requestData = convertPortfolioDataToRequest(
         portfolioData,
         projectIds
       );
-      console.log("📨 포트폴리오 수정 API 요청 데이터:", requestData);
 
       // 4. 포트폴리오 수정 API 호출
       await updatePortfolio(Number(portfolioId), requestData);
-      console.log("포트폴리오 수정 성공");
 
       alert("포트폴리오가 성공적으로 수정되었습니다!");
       navigate("/mypage");

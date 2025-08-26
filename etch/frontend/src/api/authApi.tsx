@@ -15,7 +15,6 @@ export const getMemberInfo = async (): Promise<UserProfile> => {
   try {
     // authInstance를 사용하여 API 호출
     const response = await authInstance.get<ApiResponse<UserProfile>>("/members/me");
-    console.log("Member info:", response.data.data); // 실제 데이터 로깅
     return response.data.data; // 응답의 data 속성만 반환
   } catch (error) {
     throw error;

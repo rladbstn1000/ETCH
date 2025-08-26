@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import CoverLetterInfoSection from "../../../molecules/mypage/coverLetterInfoSection";
 import QuestionList from "../../../organisms/mypage/questionList";
-import { mockQuestions } from "../../../../types/mock/mockQuestionData";
+import { getStandardQuestions } from "../../../../types/coverLetter";
 import CoverLetterActions from "../../../organisms/mypage/coverLetterActions";
 import {
   getCoverLetterDetail,
@@ -79,7 +79,6 @@ function MyPageCoverLetterEditPage() {
         answer5: answers[4] || "",
       };
 
-      console.log("자기소개서 수정 요청:", coverLetterData);
       await updateCoverLetter(coverLetterId, coverLetterData);
       alert("자기소개서가 성공적으로 수정되었습니다!");
       navigate("/mypage");
@@ -113,7 +112,7 @@ function MyPageCoverLetterEditPage() {
         onChange={setCoverLetterName}
       />
       <QuestionList
-        questions={mockQuestions}
+        questions={getStandardQuestions(answers, handleAnswerChange)}
         answers={answers}
         onAnswerChange={handleAnswerChange}
       />

@@ -1,8 +1,8 @@
 # etch/frontend/Dockerfile
 
 # --- 1. 빌드(Build) 스테이지 ---
-# Node.js 18-alpine 버전을 빌드 환경으로 사용합니다. 'builder'라는 별명을 붙여줍니다.
-FROM node:18-alpine AS builder
+# Node.js 20-alpine 버전을 빌드 환경으로 사용합니다. 'builder'라는 별명을 붙여줍니다.
+FROM node:20-alpine AS builder
 
 # 작업 디렉토리를 /app 으로 설정합니다.
 WORKDIR /app

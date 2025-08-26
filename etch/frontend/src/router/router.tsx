@@ -49,9 +49,6 @@ const MypageFavoritePage = lazy(
   () => import("../components/pages/mypage/mypageFavoritePage.tsx")
 );
 
-const DetailFavoriteCompany = lazy(
-  () => import("../components/pages/mypage/favorite/detailFavoriteCompany.tsx")
-);
 const DetailFavoriteProject = lazy(
   () => import("../components/pages/mypage/favorite/detailFavoriteProject.tsx")
 );
@@ -159,11 +156,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/additional-info",
-        element: <AdditionalInfoPage />,
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <AdditionalInfoPage />
+          </Suspense>
+        ),
       },
       {
         path: "/projects",
-        element: <ProjectListPage />,
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <ProjectListPage />
+          </Suspense>
+        ),
       },
       {
         path: "/projects/write",
@@ -187,7 +192,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/jobs",
-        element: <JobPage />,
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <JobPage />
+          </Suspense>
+        ),
       },
       {
         path: "members/:userId/projects",
@@ -219,7 +228,11 @@ const router = createBrowserRouter([
           },
           {
             path: "applications",
-            element: <MypageApplicationsPage />,
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <MypageApplicationsPage />
+              </Suspense>
+            ),
           },
           {
             path: "portfolios",
@@ -255,14 +268,6 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "favorites/companies",
-            element: (
-              <Suspense fallback={<LoadingPage />}>
-                <DetailFavoriteCompany />
-              </Suspense>
-            ),
-          },
-          {
             path: "favorites/projects",
             element: (
               <Suspense fallback={<LoadingPage />}>
@@ -272,11 +277,19 @@ const router = createBrowserRouter([
           },
           {
             path: "projects",
-            element: <MypageProjectPage />,
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <MypageProjectPage />
+              </Suspense>
+            ),
           },
           {
             path: "coverletters",
-            element: <MypageCoverLetterPage />,
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <MypageCoverLetterPage />
+              </Suspense>
+            ),
           },
           {
             path: "cover-letter-edit/:id",
@@ -296,11 +309,19 @@ const router = createBrowserRouter([
           },
           {
             path: "followers",
-            element: <MypageFollowerPage />,
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <MypageFollowerPage />
+              </Suspense>
+            ),
           },
           {
             path: "following",
-            element: <MypageFollowingPage />,
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <MypageFollowingPage />
+              </Suspense>
+            ),
           },
         ],
       },

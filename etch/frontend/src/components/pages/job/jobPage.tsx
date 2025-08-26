@@ -9,7 +9,6 @@ import JobFilterModal, {
 import { useJobs } from "../../../hooks/useJobs";
 
 export default function JobPage() {
-  console.log("[JobPage] Component rendered");
 
   const [currentView, setCurrentView] = useState<"list" | "calendar">(
     "calendar"
@@ -82,15 +81,6 @@ export default function JobPage() {
     handleDateRangeChange(startDate, endDate);
   };
 
-  console.log("[JobPage] Current state:", {
-    currentView,
-    selectedJobId,
-    allJobsCount: allJobs.length,
-    filteredJobsCount: filteredJobs.length,
-    loading,
-    error,
-    activeFilters,
-  });
 
   const handleViewChange = (view: "list" | "calendar") => {
     setCurrentView(view);

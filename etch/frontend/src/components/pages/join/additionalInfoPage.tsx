@@ -38,12 +38,6 @@ function AdditionalInfoPage() {
   };
 
   const handleSubmit = async () => {
-    console.log("=== 디버깅 ===");
-    console.log("nickname:", nickname);
-    console.log("tel:", tel);
-    console.log("birth:", birth);
-    console.log("gender:", gender);
-    console.log("profile:", profile?.name || "No file selected");
 
     try {
       const accessToken = TokenManager.getToken();
@@ -71,9 +65,6 @@ function AdditionalInfoPage() {
         formData.append("profile", profile);
       }
 
-      console.log("회원가입 데이터:", memberData);
-      console.log("프로필 파일:", profile?.name || "No file selected");
-      console.log("Access Token:", accessToken);
 
       const response = await axios.post(
         "https://etch.it.kr/api/v1/members",
