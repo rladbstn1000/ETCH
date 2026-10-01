@@ -1,0 +1,460 @@
+{
+  "schema_version": "1.0",
+  "recorded_as_of": "2026-10-01",
+  "language": "ko",
+  "purpose": "PPT 및 링크형 포트폴리오에 공통으로 사용하는 ETCH 사실·사례 입력",
+  "provenance": {
+    "basis": [
+      "기존 GitHub README",
+      "제공된 단계별 보고서",
+      "사용자 제공 후속 작업 완료 보고",
+      "원격 반영 전 선택한 로컬 MySQL 비교·검색 승인·배포 원본 대조"
+    ],
+    "independent_runtime_revalidation_in_this_document_task": false,
+    "raw_mysql_comparison_inspected_in_this_task": true,
+    "remote_code_baseline_before_document_update": "b6feee5a3b0e29ed47cf82d96f51426d05e90fb5",
+    "original_readme_git_blob": "5c91ee3822940de26ce072a393d66a887d5bd01c",
+    "implementation_source_publication": "LOCAL_ONLY_NOT_PUSHED_IN_THIS_TASK",
+    "human_source": "ETCH.md",
+    "evidence_index": "EVIDENCE.md",
+    "local_record_crosscheck_date": "2026-10-01",
+    "crosscheck_scope": "기존 원본 기록의 수치·조건·hash 대조. 실험 재실행·Cloudflare 재배포 없음.",
+    "packet_adjustments": [
+      "원본 열람 여부를 초안 작성과 원격 반영 전 대조로 구분",
+      "마지막 5건의 작성자 조건 명확화",
+      "MySQL MockMvc 5개의 권한·상세·색인 스냅샷 포함 범위 명확화"
+    ]
+  },
+  "project": {
+    "id": "etch",
+    "name": "ETCH",
+    "tagline": "채용·뉴스·프로젝트 통합 탐색 플랫폼",
+    "team_period": {
+      "start_month": "2025-07",
+      "end_month": "2025-08",
+      "precision": "month"
+    },
+    "team_size": 6,
+    "contributor": "김윤수",
+    "team_role": "백엔드 리드",
+    "team_role_scope": [
+      "백엔드 아키텍처 설계",
+      "핵심·검색 API 개발",
+      "Elasticsearch 인덱싱·필터",
+      "채용 데이터 전처리"
+    ],
+    "personal_followup_period": "2026-09~2026-10",
+    "strengths": [
+      "데이터 정합성",
+      "장애 후 재처리",
+      "SQL 분석",
+      "조건을 고정한 검증"
+    ],
+    "team_features_not_new_personal_claims": [
+      "기존 React 화면과 API",
+      "뉴스 URL SHA-256 중복 방지",
+      "외부 공고 ID unique",
+      "팀 인프라·추천·채팅 전체"
+    ]
+  },
+  "public_demo": {
+    "url": "https://etch-showcase.pages.dev/",
+    "case_studies_url": "https://etch-showcase.pages.dev/process",
+    "type": "STATIC_SYNTHETIC_SHOWCASE",
+    "provider": "Cloudflare Pages Direct Upload",
+    "project": "etch-showcase",
+    "production_branch": "main",
+    "deployment_id": "7bb1fdec-1df1-492c-a30a-713ef16bc67c",
+    "immutable_url": "https://7bb1fdec.etch-showcase.pages.dev/",
+    "build_source_commit": "b12eaf4",
+    "post_deployment_record_commit": "7ed428f",
+    "uploaded_file_count": 9,
+    "uncompressed_bytes": 803579,
+    "http_payload_files": 8,
+    "zip_sha256": "c0c919a4ba7b01c837d59a6c567d664ced46306a05a03c53581a5c8973d30dce",
+    "api_oauth_websocket_external_data_calls_observed": 0,
+    "validation": {
+      "production_chrome_passed": 8,
+      "immutable_process_passed": 1,
+      "viewport_widths_px": [
+        320,
+        390
+      ],
+      "safari_latest_release": "NOT_RUN",
+      "playwright_webkit_latest_release": "NOT_RUN",
+      "physical_mobile": "NOT_RUN"
+    },
+    "unsupported": [
+      "실제 로그인",
+      "실제 지원서 제출",
+      "업로드",
+      "메시지 전송"
+    ],
+    "state_storage": "MEMORY_ONLY",
+    "backend_deployment": "NOT_DEPLOYED",
+    "evidence_id": "E5"
+  },
+  "cases": [
+    {
+      "id": "indexing-recovery",
+      "title": "프로젝트 색인 자동 복구",
+      "evidence_id": "E1",
+      "problem": "DB 커밋 후 ES 실패로 변경이 검색에 반영되지 않음",
+      "changes": [
+        "동일 트랜잭션 outbox",
+        "영속 재시도 단일 worker",
+        "최신 스냅샷과 revision",
+        "비공개·삭제 tombstone",
+        "현재 DB 공개 여부 일괄 검사"
+      ],
+      "verification": "실제 ES 중단·backend 강제 종료/재시작 후 수동 재색인 없이 DB·ES·검색의 최신 상태 일치",
+      "limitations": [
+        "단일 worker",
+        "at-least-once 최신 상태 수렴",
+        "ES 전체 소실 자동 복구 미구현",
+        "장애 중 검색 가용성 보장 아님"
+      ]
+    },
+    {
+      "id": "mysql-project-list",
+      "title": "MySQL 목록 작성자 추가 SELECT 개선",
+      "evidence_id": "E4",
+      "problem": "DTO 작성자 접근 시 서로 다른 작성자 수에 따라 추가 SELECT 증가",
+      "changes": [
+        "목록 Repository 메서드 한정 EntityGraph"
+      ],
+      "verification": "실제 MySQL 합성 데이터의 JDBC 실행 횟수와 158조건 응답 JSON 비교",
+      "metric_id": "mysql-list",
+      "limitations": [
+        "Controller 직접 호출→DTO/JSON 계측",
+        "운영 HTTP 지연 미측정",
+        "Formula 내부 집계 비용 잔존",
+        "모든 페이지가 항상 SQL 2회는 아님"
+      ]
+    },
+    {
+      "id": "incremental-sync",
+      "title": "채용·뉴스 증분 동기화",
+      "evidence_id": "E2",
+      "problem": "전체 조회 반복과 변경·삭제·전달 실패의 구분 필요",
+      "changes": [
+        "ID별 최신 상태·trigger·revision",
+        "UTC 마이크로초 변경 추적",
+        "JDBC 겹침 조회",
+        "입력별 checkpoint/PQ/DLQ",
+        "ID·내용 대조와 현재 DB repair"
+      ],
+      "verification": "재조회 겹침 밖의 PQ 적재 작업을 실제 SIGKILL·재생성 후 자동 복구; DLQ·지연 누락은 별도 운영자 복구",
+      "metric_id": "jdbc-incremental",
+      "limitations": [
+        "반환량은 스캔량 아님",
+        "겹침 밖 미관측 변경 자동 보장 아님",
+        "유한 DLQ",
+        "전체 대조 비용 별도"
+      ]
+    },
+    {
+      "id": "search-evaluation",
+      "title": "검색 평가와 기준선 관리",
+      "evidence_id": "E3",
+      "problem": "엔진 변경에 따른 결과 차이와 기능 계약을 구분할 필요",
+      "changes": [
+        "고정 합성 코퍼스·질의·라벨",
+        "실제 API nDCG@5",
+        "과거 비교·현재 계약·재현성 분리",
+        "대상 hash에 한정한 승인·활성화"
+      ],
+      "verification": "두 질의의 2위→3위 손실과 과거 비교 FAIL을 보존하고 지정 현재 기준선 채택",
+      "metric_id": "search-ranking",
+      "limitations": [
+        "자체 합성 관련도 판정",
+        "실사용자 정확도 아님",
+        "최신순과 관련도순 목적 다름",
+        "후속 backend 전체 빌드로 승인 자동 확대 금지"
+      ]
+    }
+  ],
+  "measurements": {
+    "mysql-list": {
+      "unit": "executed JDBC statements",
+      "database": "MySQL",
+      "data": "synthetic",
+      "measurement_boundary": "Controller direct call through DTO/JSON serialization",
+      "sorts_tested": [
+        "popular",
+        "views",
+        "latest"
+      ],
+      "first_full_page": [
+        {
+          "returned": 1,
+          "same_author_before": 3,
+          "same_author_after": 2,
+          "distinct_authors_before": 3,
+          "distinct_authors_after": 2
+        },
+        {
+          "returned": 3,
+          "same_author_before": 3,
+          "same_author_after": 2,
+          "distinct_authors_before": 5,
+          "distinct_authors_after": 2
+        },
+        {
+          "returned": 10,
+          "same_author_before": 3,
+          "same_author_after": 2,
+          "distinct_authors_before": 12,
+          "distinct_authors_after": 2
+        },
+        {
+          "returned": 30,
+          "same_author_before": 3,
+          "same_author_after": 2,
+          "distinct_authors_before": 32,
+          "distinct_authors_after": 2
+        },
+        {
+          "returned": 100,
+          "same_author_before": 3,
+          "same_author_after": 2,
+          "distinct_authors_before": 102,
+          "distinct_authors_after": 2
+        }
+      ],
+      "tail_page": {
+        "page_size": 100,
+        "returned": 5,
+        "distinct_authors_before": 6,
+        "after": 1,
+        "same_author_before": 2
+      },
+      "empty_page": {
+        "before": 2,
+        "after": 2
+      },
+      "identical_json_conditions": 158,
+      "related_tests": 50,
+      "unchanged_business_tables": 21,
+      "baseline_commit": "236bd38",
+      "improvement_commit": "7c26dbd",
+      "separate_earlier_measurement": {
+        "database": "H2 (MySQL mode)",
+        "issue": "중복 좋아요 COUNT",
+        "returned": 3,
+        "before": 7,
+        "after": 4,
+        "commit": "1a13eed"
+      },
+      "mysql_mockmvc_tests_included": 5,
+      "mysql_mockmvc_scope": [
+        "권한",
+        "상세",
+        "색인 스냅샷"
+      ],
+      "other_related_tests": "기존 H2·mock 기반 회귀",
+      "unchanged_business_tables_scope": "목록 조회 전후; 일반 모드 성공 상세의 의도된 view/revision/outbox 증가는 별도 검사"
+    },
+    "jdbc-incremental": {
+      "unit": "returned rows, not scanned rows",
+      "environment": "Mac M4 Pro/48GB local Docker synthetic fixtures",
+      "fixture_created_per_type": 120,
+      "test_settings": {
+        "poll_seconds": 2,
+        "overlap_seconds": 20,
+        "fetch_size": 50
+      },
+      "normal_settings": {
+        "poll_seconds": 10,
+        "overlap_seconds": 120,
+        "fetch_size": 50
+      },
+      "full_source_returned": {
+        "jobs": 120,
+        "news": 121
+      },
+      "changed_one_each_returned": {
+        "jobs": 1,
+        "news": 1
+      },
+      "no_change_after_overlap_returned": {
+        "jobs": 0,
+        "news": 0
+      },
+      "observed_change_to_sync_seconds": 1.535,
+      "observed_es_resume_to_recovery_seconds": 12.175
+    },
+    "search-ranking": {
+      "metric": "nDCG@5",
+      "query_count": 30,
+      "judgments": 720,
+      "judgment_grades": [
+        0,
+        1,
+        2
+      ],
+      "gains": [
+        0,
+        1,
+        3
+      ],
+      "data_labeling": "Codex-authored synthetic corpus and relevance reasons, frozen before evaluation",
+      "averages": [
+        {
+          "type": "jobs",
+          "sort": "relevance",
+          "prior": 0.93225,
+          "accepted": 0.927753
+        },
+        {
+          "type": "news",
+          "sort": "relevance",
+          "prior": 0.91192,
+          "accepted": 0.907424
+        },
+        {
+          "type": "projects",
+          "sort": "latest",
+          "prior": 0.707469,
+          "accepted": 0.707469
+        }
+      ],
+      "known_regressions": [
+        {
+          "query_id": "job-02",
+          "query": "React",
+          "direct_relevant_rank_before": 2,
+          "after": 3,
+          "ndcg_before": 0.926045,
+          "ndcg_after": 0.881078,
+          "result_loss": false
+        },
+        {
+          "query_id": "news-02",
+          "query": "React",
+          "direct_relevant_rank_before": 2,
+          "after": 3,
+          "ndcg_before": 0.926045,
+          "ndcg_after": 0.881078,
+          "result_loss": false
+        }
+      ],
+      "candidate_sha256": "d1f4c74ab24fc3c484b8525447f9a46e4abe7a03b940938cb3e84effde01a05a",
+      "summary_sha256": "3e9907971785afe20b156754ec6d855e48ef1a4ed559b7ccb9d8728ae9216c95",
+      "acceptance_status": "APPROVED_AND_ACTIVE_LOCAL_RECORDS_CHECKED",
+      "approval_commits": [
+        "4fe89c6",
+        "90c582d"
+      ],
+      "engine": {
+        "elasticsearch_nori": "9.4.7",
+        "java_client": "9.4.5"
+      },
+      "historical_comparison_failures_preserved": 2
+    }
+  },
+  "supporting_work": [
+    "권한·소유권·비공개 검사",
+    "검색 필터·특수문자·날짜 경계",
+    "빈 볼륨 설치·이관·복귀",
+    "읽기 전용 로컬 정책",
+    "정적 공급부와 실제 API 모드 분리"
+  ],
+  "evidence_sources": [
+    {
+      "id": "E1",
+      "public_summary": "https://etch-showcase.pages.dev/process",
+      "local_paths": [
+        "docs/portfolio/PHASE2.md",
+        "docs/portfolio/evidence/phase2-recovery.txt"
+      ],
+      "access": "LOCAL_RAW_PUBLIC_SUMMARY"
+    },
+    {
+      "id": "E2",
+      "public_summary": "https://etch-showcase.pages.dev/process",
+      "local_paths": [
+        "docs/portfolio/PHASE3.md",
+        "docs/portfolio/evidence/phase3-incremental-pq-confirmed.txt"
+      ],
+      "access": "LOCAL_RAW_PUBLIC_SUMMARY"
+    },
+    {
+      "id": "E3",
+      "public_summary": "https://etch-showcase.pages.dev/process",
+      "local_paths": [
+        "docs/portfolio/phase8-search.md",
+        "docs/portfolio/evidence/phase8/search-baseline-approval.json",
+        "docs/portfolio/evidence/phase8/active-search-baseline.json"
+      ],
+      "access": "LOCAL_RAW_PUBLIC_SUMMARY"
+    },
+    {
+      "id": "E4",
+      "public_summary": "https://etch-showcase.pages.dev/process",
+      "local_paths": [
+        "docs/portfolio/project-list-mysql.md",
+        "docs/portfolio/evidence/project-list-mysql/comparison.json"
+      ],
+      "access": "LOCAL_RAW_PUBLIC_SUMMARY"
+    },
+    {
+      "id": "E5",
+      "public_summary": "https://etch-showcase.pages.dev/",
+      "local_paths": [
+        "docs/portfolio/SHOWCASE.md",
+        ".local/showcase/mysql-case-study/manifest.json"
+      ],
+      "access": "LOCAL_RAW_PUBLIC_DEMO"
+    }
+  ],
+  "portfolio_handoff": {
+    "output_formats": [
+      "PPT",
+      "PDF derived from PPT",
+      "link-based portfolio"
+    ],
+    "recommended_etch_pages": [
+      "서비스·역할·데모 범위",
+      "프로젝트 색인 자동 복구",
+      "MySQL 목록 조회 개선",
+      "증분 동기화·검색 검증 요약 및 한계"
+    ],
+    "shared_project_fields": [
+      "purpose",
+      "period",
+      "team_size",
+      "my_role",
+      "team_implementation",
+      "personal_changes",
+      "problem",
+      "decision",
+      "implementation",
+      "verification",
+      "measurement_context",
+      "limitations",
+      "demo",
+      "evidence"
+    ],
+    "other_projects": "후속 작업에서 각 프로젝트의 최신 원본을 별도로 읽어 같은 구조에 맞춘다. 이 파일은 ETCH만의 사실을 담는다."
+  },
+  "do_not_claim": [
+    "실제 backend가 공개 사이트에서 실행 중",
+    "정적 문자열 검색이 Elasticsearch 검색",
+    "JDBC 102→2가 응답속도 51배",
+    "모든 페이지 SQL 2회",
+    "전체 N+1 해결",
+    "합성 nDCG가 실사용자 정확도",
+    "모든 동기화 누락 자동 복구",
+    "exactly-once",
+    "모든 보안·자격증명·공개 권리 검토 완료",
+    "개선 로컬 커밋이 이미 원격에 존재"
+  ],
+  "remaining_status": {
+    "backend_security": "UNRESOLVED_SEPARATE_SCOPE",
+    "historical_credentials": "OWNER_ACTION_PENDING",
+    "full_source_history_and_assets": "SEPARATE_REVIEW",
+    "static_showcase": "DEPLOYED_EXISTING_RECORDS_CHECKED_NO_REDEPLOY",
+    "final_multi_project_portfolio": "NOT_YET_CREATED"
+  }
+}
